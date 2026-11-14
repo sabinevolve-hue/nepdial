@@ -168,6 +168,7 @@
 </header>
 
 <main>
+  <a id="appBanner" href="nepdial.apk" download style="display:none;text-decoration:none;background:var(--accent);color:#fff;border-radius:14px;padding:13px 14px;margin-bottom:14px;font-weight:700;font-size:14px;text-align:center">📲 Get the Android app — codes run in one tap, no dialer step</a>
   <div class="quick" id="quick"></div>
   <div id="favSection"></div>
   <div id="list"></div>
@@ -542,6 +543,7 @@
   function applyTheme(){ document.body.setAttribute("data-theme",theme); document.getElementById("themeBtn").textContent = theme==="dark"?"☀️":"🌙"; }
   document.getElementById("themeBtn").addEventListener("click",function(){ theme=theme==="dark"?"light":"dark"; store.set("nd_theme",theme); applyTheme(); });
 
+  if(/Android/i.test(navigator.userAgent)) document.getElementById("appBanner").style.display="block";
   document.getElementById("yr").textContent=new Date().getFullYear();
   applyTheme();
   render();
