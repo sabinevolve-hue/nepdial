@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0b1020">
+<title>NepDial — NTC &amp; Ncell Quick Codes</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --card:#ffffff; --ink:#0d1526;
+    --muted:#5a6578; --line:#e6eaf2; --chip:#eef1f8;
+    --accent:#0a66c2; --accent-ink:#ffffff; --accent-soft:#e8f1fb;
+    --ok:#1a9d5a; --shadow:0 2px 10px rgba(14,22,40,.06), 0 1px 2px rgba(14,22,40,.08);
+    --radius:16px;
+  }
+  [data-op="ncell"]{ --accent:#7b2b8f; --accent-soft:#f5e9f8; }
+  [data-theme="dark"]{
+    --bg:#0b1020; --card:#131a2c; --ink:#eef2fb; --muted:#9aa6bf; --line:#232c42;
+    --chip:#1b2338; --accent-soft:#17233b; --shadow:0 2px 14px rgba(0,0,0,.35);
+  }
+  [data-theme="dark"][data-op="ncell"]{ --accent-soft:#2a1733; }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
+    padding-bottom:40px;
+  }
+
+  /* ===== Header ===== */
+  header{
+    position:sticky;top:0;z-index:30;background:var(--card);
+    border-bottom:1px solid var(--line);
+    padding:12px 16px 10px;
+  }
+  .brandrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.3px;font-size:20px}
+  .logo{
+    width:32px;height:32px;border-radius:9px;flex:none;
+    background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 55%, #000));
+    display:grid;place-items:center;color:#fff;font-size:17px;box-shadow:var(--shadow)
+  }
+  .iconbtn{
+    width:40px;height:40px;border-radius:11px;border:1px solid var(--line);
+    background:var(--chip);color:var(--ink);font-size:18px;display:grid;place-items:center;cursor:pointer
+  }
+  .tagline{color:var(--muted);font-size:12.5px;margin-top:2px}
+
+  /* Operator switch */
+  .opswitch{display:flex;gap:6px;background:var(--chip);border-radius:13px;padding:5px;margin-top:12px}
+  .opswitch button{
+    flex:1;border:0;background:transparent;color:var(--muted);font-weight:700;font-size:15px;
+    padding:10px;border-radius:9px;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:7px
+  }
+  .opswitch button .dot{width:9px;height:9px;border-radius:50%}
+  .opswitch button[data-k="ntc"] .dot{background:#0a66c2}
+  .opswitch button[data-k="ncell"] .dot{background:#7b2b8f}
+  .opswitch button.active{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+
+  /* Search */
+  .searchwrap{position:relative;margin-top:10px}
+  .searchwrap input{
+    width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);
+    border-radius:12px;padding:12px 40px 12px 40px;font-size:15px;outline:none
+  }
+  .searchwrap input:focus{border-color:var(--accent)}
+  .searchwrap .s-ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .searchwrap .s-clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--muted);font-size:18px;cursor:pointer;display:none;padding:6px}
+
+  /* ===== Content ===== */
+  main{padding:14px 16px}
+  .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+  .quick a{
+    text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:12px 6px;text-align:center;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;align-items:center;gap:6px;transition:transform .08s
+  }
+  .quick a:active{transform:scale(.95)}
+  .quick .qi{font-size:22px}
+  .quick .ql{font-size:11.5px;font-weight:700;color:var(--muted);line-height:1.15}
+
+  .section-title{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:22px 2px 10px;display:flex;align-items:center;gap:8px}
+  .section-title .emoji{font-size:15px}
+  #favSection .section-title{color:var(--accent)}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:14px;margin-bottom:10px;box-shadow:var(--shadow);position:relative
+  }
+  .card .top{display:flex;align-items:flex-start;gap:11px}
+  .card .ci{
+    width:38px;height:38px;flex:none;border-radius:10px;background:var(--accent-soft);
+    display:grid;place-items:center;font-size:19px
+  }
+  .card .meta{flex:1;min-width:0}
+  .card .name{font-weight:700;font-size:15.5px;margin:0 0 2px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .card .desc{color:var(--muted);font-size:13px;margin:0}
+  .star{position:absolute;top:10px;right:10px;border:0;background:transparent;font-size:19px;cursor:pointer;color:#c9d0de;padding:4px;line-height:1}
+  .star.on{color:#f5a623}
+
+  .badge{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:3px 7px;border-radius:999px}
+  .badge.menu{background:#fff3e0;color:#b25f00}
+  .badge.free{background:#e7f6ee;color:#13824a}
+  [data-theme="dark"] .badge.menu{background:#3a2a10;color:#f0b65e}
+  [data-theme="dark"] .badge.free{background:#133527;color:#5fd299}
+
+  .codeline{
+    display:flex;align-items:center;gap:8px;margin-top:11px;background:var(--bg);
+    border:1px dashed var(--line);border-radius:11px;padding:9px 11px
+  }
+  .codeline code{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:15.5px;font-weight:700;color:var(--ink);flex:1;word-break:break-all}
+
+  .actions{display:flex;gap:8px;margin-top:11px}
+  .btn{
+    flex:1;border:0;border-radius:11px;padding:12px;font-size:14.5px;font-weight:700;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;transition:transform .08s
+  }
+  .btn:active{transform:scale(.97)}
+  .btn.primary{background:var(--accent);color:var(--accent-ink)}
+  .btn.ghost{background:var(--chip);color:var(--ink);flex:0 0 46px}
+  .btn.sms{background:var(--chip);color:var(--ink);flex:0 0 auto;padding-left:14px;padding-right:14px}
+
+  /* Builder inputs */
+  .builder{margin-top:11px;display:grid;gap:8px}
+  .builder .row{display:grid;gap:8px;grid-template-columns:1fr 1fr}
+  .builder label{font-size:11.5px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px}
+  .builder input{
+    width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);
+    border-radius:10px;padding:10px;font-size:14px;outline:none
+  }
+  .builder input:focus{border-color:var(--accent)}
+
+  .empty{text-align:center;color:var(--muted);padding:40px 20px;font-size:14px}
+
+  footer{padding:24px 18px 10px;color:var(--muted);font-size:12px;line-height:1.6;text-align:center}
+  footer .note{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px;text-align:left}
+  footer b{color:var(--ink)}
+
+  /* Toast */
+  #toast{
+    position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:999px;font-size:13.5px;font-weight:600;
+    opacity:0;pointer-events:none;transition:.25s;z-index:60;box-shadow:0 6px 24px rgba(0,0,0,.25)
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media(min-width:560px){ body{max-width:520px;margin:0 auto;background:var(--bg)} .quick .ql{font-size:12.5px} }
+</style>
+</head>
+<body data-op="ntc">
+<header>
+  <div class="brandrow">
+    <div class="brand"><span class="logo">⚡</span> NepDial</div>
+    <div style="display:flex;gap:8px"><button class="iconbtn" id="langBtn" aria-label="Language" style="font-size:13px;font-weight:800;width:auto;padding:0 12px">नेपाली</button><button class="iconbtn" id="themeBtn" aria-label="Toggle theme">🌙</button></div>
+  </div>
+  <div class="tagline" id="tagline"></div>
+
+  <div class="opswitch" id="opswitch">
+    <button data-k="ntc" class="active"><span class="dot"></span> NTC</button>
+    <button data-k="ncell"><span class="dot"></span> Ncell</button>
+  </div>
+
+  <div class="searchwrap">
+    <span class="s-ic">🔎</span>
+    <input id="search" type="search" placeholder="Search balance, data, number, loan…" autocomplete="off">
+    <button class="s-clr" id="clrBtn" aria-label="Clear">✕</button>
+  </div>
+</header>
+
+<main>
+  <div class="quick" id="quick"></div>
+  <div id="favSection"></div>
+  <div id="list"></div>
+  <div id="empty" class="empty" style="display:none">No codes match “<span id="q"></span>”.</div>
+</main>
+
+<footer>
+  <div class="note">
+    <b>How it works:</b> Tap <b>Dial</b> and your phone's dialer opens with the code filled in — then press the call button. The code is also copied, so if the dialer doesn't open you can paste it into your phone app. Codes marked <span class="badge menu">Menu</span> open an on-screen menu you navigate with number keys. All balance/number codes are <span class="badge free">Free</span> to dial.
+    <br><br>
+    <b>⚠️ Heads up:</b> Operators change codes and pack prices often. Codes verified Nov 2026 from public sources — if one doesn't work, the operator app (NT Connect / Ncell) is the fallback. This is an independent helper, not affiliated with NTC or Ncell.
+  </div>
+  NepDial · Built for everyday Nepal · <span id="yr"></span>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- helpers ---------- */
+  var store = {
+    get:function(k,d){ try{ var v=localStorage.getItem(k); return v==null?d:JSON.parse(v);}catch(e){return d;} },
+    set:function(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+  };
+  function telHref(code){ return "tel:" + code.replace(/#/g,"%23").replace(/\s+/g,""); }
+  function smsHref(to,body){ return "sms:"+to+"?body="+encodeURIComponent(body); }
+  function toast(msg){
+    var t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show");
+    clearTimeout(t._t); t._t=setTimeout(function(){t.classList.remove("show");},1600);
+  }
+  function copy(text){
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){toast("Copied "+text);},function(){fallbackCopy(text);}); }
+    else fallbackCopy(text);
+  }
+  function fallbackCopy(text){
+    var ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select(); try{document.execCommand("copy");toast("Copied "+text);}catch(e){toast(text);} document.body.removeChild(ta);
+  }
+
+  /* ---------- data ----------
+     type: dial = instant USSD | menu = USSD that opens a menu | call = plain phone number
+     sms: {to, body} optional second action
+     builder: special interactive (recharge / transfer)
+  */
+  var DATA = {
+    ntc:{
+      label:"NTC", care:"1498",
+      quick:[
+        {ic:"💰",l:"Balance",code:"*400#"},
+        {ic:"🔢",l:"My Number",code:"*9#"},
+        {ic:"📶",l:"Data Packs",code:"*1415#",menu:true},
+        {ic:"🆘",l:"Loan",code:"*1477#",menu:true}
+      ],
+      cats:[
+        {name:"Balance & Validity", emoji:"💰", items:[
+          {ic:"💰",name:"Main balance",desc:"Your talktime / main balance & validity",code:"*400#",type:"dial",free:true,sms:{to:"1415",body:"BL"}},
+          {ic:"📊",name:"Remaining data volume",desc:"MB/GB left in your active data pack + expiry",code:"*1415*55#",type:"dial",free:true,sms:{to:"1415",body:"VL"}}
+        ]},
+        {name:"Data & Packs", emoji:"📶", items:[
+          {ic:"📶",name:"Data packs & offers",desc:"Browse and activate internet packs, combos, festival offers",code:"*1415#",type:"menu",free:true},
+          {ic:"➕",name:"Add-on packages",desc:"Subscribe to add-on data/voice packs",code:"*1442#",type:"menu"},
+          {ic:"📞",name:"Voice & SMS packs",desc:"Inside the main menu — same code as data",code:"*1415#",type:"menu"},
+          {ic:"🔁",name:"Recurring postpaid pack",desc:"Subscribe / manage auto-renew pack (postpaid)",code:"*1415*2*4#",type:"menu"},
+          {ic:"🚀",name:"4G / LTE activation & SIM check",desc:"Enable 4G and check SIM status",code:"*444#",type:"menu"}
+        ]},
+        {name:"My Number & SIM", emoji:"🪪", items:[
+          {ic:"🔢",name:"Your own number",desc:"Shows your NTC mobile number",code:"*9#",type:"dial",free:true},
+          {ic:"🪪",name:"Number + owner name",desc:"Your number and registered SIM owner name",code:"*922#",type:"dial",free:true}
+        ]},
+        {name:"Recharge & Transfer", emoji:"💳", items:[
+          {ic:"💳",name:"Recharge with card PIN",desc:"Top up using a 16-digit Namaste/NT recharge card",type:"builder",builder:"ntc-recharge",free:true},
+          {ic:"🔄",name:"Balance transfer",desc:"Send balance to another NTC number (needs your security code)",type:"builder",builder:"ntc-transfer"},
+          {ic:"☎️",name:"Recharge by IVR",desc:"Call & follow voice prompts to enter card PIN",code:"1412",type:"call"}
+        ]},
+        {name:"Loan (Namaste Credit)", emoji:"🆘", items:[
+          {ic:"🆘",name:"Emergency loan",desc:"Borrow balance when you're out — repaid on next recharge",code:"*1477#",type:"menu",free:true}
+        ]},
+        {name:"Caller Tune & Extras", emoji:"🎵", items:[
+          {ic:"🎵",name:"Caller tune (CRBT)",desc:"Set / manage your ringback tune",code:"*1455#",type:"menu",sms:{to:"1455",body:"UNSUB"}},
+          {ic:"🌐",name:"Cheap ISD prefix",desc:"Put 1424 before an international number for cheaper calls",code:"1424",type:"info"},
+          {ic:"📡",name:"NT Fiber (FTTH) balance",desc:"Fiber balance, package info & bonus data",code:"*1416#",type:"dial"}
+        ]},
+        {name:"Customer Care", emoji:"📞", items:[
+          {ic:"📞",name:"NTC customer care",desc:"GSM help & complaints",code:"1498",type:"call"},
+          {ic:"🧾",name:"New fiber connection",desc:"Call 198, then press 1",code:"198",type:"call"}
+        ]}
+      ]
+    },
+
+    ncell:{
+      label:"Ncell", care:"9005",
+      quick:[
+        {ic:"💰",l:"Balance",code:"*901#"},
+        {ic:"🔢",l:"My Number",code:"*903#"},
+        {ic:"📶",l:"Data Packs",code:"*17123#",menu:true},
+        {ic:"🆘",l:"Saapati",code:"*9988#",menu:true}
+      ],
+      cats:[
+        {name:"Balance & Validity", emoji:"💰", items:[
+          {ic:"💰",name:"Main balance",desc:"Balance + active data pack status (both codes work)",code:"*901#",type:"dial",free:true,alt:"*101#",sms:{to:"90011",body:" "}},
+          {ic:"⏳",name:"Balance validity",desc:"When your main balance expires",code:"*144#",type:"dial",free:true},
+          {ic:"📊",name:"Remaining data (SMS)",desc:"Text S to 17123 for data left, validity & bonus",code:"17123",type:"sms-only",sms:{to:"17123",body:"S"}}
+        ]},
+        {name:"Data & Packs", emoji:"📶", items:[
+          {ic:"📶",name:"Data packs & offers",desc:"Browse and activate internet packs & combos",code:"*17123#",type:"menu",free:true},
+          {ic:"📞",name:"Voice packs",desc:"Buy voice/minute packs (text S to 17118 for minutes left)",code:"*17118#",type:"menu",sms:{to:"17118",body:"S"}},
+          {ic:"💬",name:"SMS packs",desc:"Buy SMS bundles",code:"*1119#",type:"menu"},
+          {ic:"🗂️",name:"Main self-care menu",desc:"All Ncell services in one menu",code:"*123#",type:"menu",free:true}
+        ]},
+        {name:"My Number & SIM", emoji:"🪪", items:[
+          {ic:"🔢",name:"Your own number",desc:"Shows your Ncell number (both codes work)",code:"*903#",type:"dial",free:true,alt:"*103#"}
+        ]},
+        {name:"Recharge & Transfer", emoji:"💳", items:[
+          {ic:"💳",name:"Recharge with card PIN",desc:"Top up using a 16-digit Ncell recharge card",type:"builder",builder:"ncell-recharge",free:true},
+          {ic:"👥",name:"Recharge another number",desc:"Use your card PIN to top up someone else's Ncell number",type:"builder",builder:"ncell-recharge-other"},
+          {ic:"🔄",name:"Balance transfer",desc:"Send balance to another Ncell number",type:"builder",builder:"ncell-transfer"},
+          {ic:"✉️",name:"Recharge by SMS",desc:"Text your card PIN to 90012",code:"90012",type:"sms-only",sms:{to:"90012",body:"PIN"}}
+        ]},
+        {name:"Saapati (Loan)", emoji:"🆘", items:[
+          {ic:"🆘",name:"Saapati — balance/data loan",desc:"Borrow balance, minutes or data when you're low",code:"*9988#",type:"menu",free:true}
+        ]},
+        {name:"Caller Tune & Extras", emoji:"🎵", items:[
+          {ic:"🎵",name:"Caller tune (PRBT)",desc:"Set / manage your ringback tune (or call 17117)",code:"*17117#",type:"menu",sms:{to:"17117",body:"PRBT"}},
+          {ic:"✈️",name:"International roaming",desc:"Activate roaming before you travel",code:"*12127#",type:"menu"},
+          {ic:"⭐",name:"My5 (favourite numbers)",desc:"Discounted calls to your chosen numbers",code:"*5599#",type:"menu"}
+        ]},
+        {name:"Customer Care", emoji:"📞", items:[
+          {ic:"📞",name:"Ncell customer care",desc:"Prepaid help & complaints",code:"9005",type:"call"},
+          {ic:"🔊",name:"Self-care IVR",desc:"Voice menu for balance & info",code:"9001",type:"call"}
+        ]}
+      ]
+    }
+  };
+
+  /* universal codes shown under both operators */
+  var UNIVERSAL = {name:"Universal (any SIM)", emoji:"🌍", items:[
+    {ic:"📱",name:"Check IMEI number",desc:"Your phone's hardware IMEI — works on any phone",code:"*#06#",type:"dial",free:true},
+    {ic:"➡️",name:"Call forwarding — all calls",desc:"Forward every call to another number",code:"**21*NUMBER#",type:"builder",builder:"forward-on"},
+    {ic:"⬅️",name:"Cancel call forwarding",desc:"Turn off all call forwarding",code:"##21#",type:"dial"},
+    {ic:"🔍",name:"Check call forwarding status",desc:"See if any forwarding is active",code:"*#21#",type:"dial"},
+    {ic:"⏸️",name:"Call waiting — on / off",desc:"Activate *43#   ·   deactivate #43#",code:"*43#",type:"dial"}
+  ]};
+
+
+  var NP = {
+    "Main balance":"मुख्य ब्यालेन्स","Remaining data volume":"बाँकी डाटा","Data packs & offers":"डाटा प्याक र अफर",
+    "Add-on packages":"एड-अन प्याकेज","Voice & SMS packs":"भ्वाइस र SMS प्याक","Recurring postpaid pack":"पोस्टपेड रिकरिङ प्याक",
+    "4G / LTE activation & SIM check":"4G सक्रिय र SIM जाँच","Your own number":"आफ्नो नम्बर","Number + owner name":"नम्बर र सिम धनीको नाम",
+    "Recharge with card PIN":"कार्ड PIN बाट रिचार्ज","Balance transfer":"ब्यालेन्स ट्रान्सफर","Recharge by IVR":"IVR बाट रिचार्ज",
+    "Emergency loan":"आपतकालीन सापटी","Caller tune (CRBT)":"कलर ट्युन (CRBT)","Cheap ISD prefix":"सस्तो ISD कल",
+    "NT Fiber (FTTH) balance":"NT फाइबर ब्यालेन्स","NTC customer care":"NTC ग्राहक सेवा","New fiber connection":"नयाँ फाइबर जडान",
+    "Balance validity":"ब्यालेन्सको म्याद","Remaining data (SMS)":"बाँकी डाटा (SMS)","Voice packs":"भ्वाइस प्याक","SMS packs":"SMS प्याक",
+    "Main self-care menu":"मुख्य सेवा मेनु","Recharge another number":"अरूको नम्बरमा रिचार्ज","Recharge by SMS":"SMS बाट रिचार्ज",
+    "Saapati — balance/data loan":"सापटी — ब्यालेन्स/डाटा","Caller tune (PRBT)":"कलर ट्युन (PRBT)","International roaming":"अन्तर्राष्ट्रिय रोमिङ",
+    "My5 (favourite numbers)":"My5 (मनपर्ने नम्बर)","Ncell customer care":"Ncell ग्राहक सेवा","Self-care IVR":"सेल्फ-केयर IVR",
+    "Check IMEI number":"IMEI नम्बर हेर्ने","Call forwarding — all calls":"कल फर्वार्ड — सबै कल","Cancel call forwarding":"कल फर्वार्ड रद्द",
+    "Check call forwarding status":"कल फर्वार्ड स्थिति","Call waiting — on / off":"कल वेटिङ — अन/अफ",
+    "Balance & Validity":"ब्यालेन्स र म्याद","Data & Packs":"डाटा र प्याक","My Number & SIM":"मेरो नम्बर र सिम",
+    "Recharge & Transfer":"रिचार्ज र ट्रान्सफर","Loan (Namaste Credit)":"सापटी (नमस्ते क्रेडिट)","Saapati (Loan)":"सापटी",
+    "Caller Tune & Extras":"कलर ट्युन र अन्य","Customer Care":"ग्राहक सेवा","Universal (any SIM)":"सबै सिममा चल्ने","Pinned":"पिन गरिएको",
+    "Balance":"ब्यालेन्स","My Number":"मेरो नम्बर","Data Packs":"डाटा प्याक","Loan":"सापटी","Saapati":"सापटी","Dial":"डायल",
+    "Search balance, data, number, loan…":"ब्यालेन्स, डाटा, नम्बर, सापटी खोज्नुहोस्…",
+    "NTC & Ncell — every short code, one tap away":"NTC र Ncell — सबै सर्ट कोड, एकै ट्यापमा"
+  };
+  var lang = store.get("nd_lang","en");
+  function T(x){ return (lang==="np" && NP[x]) ? NP[x] : x; }
+
+  /* ---------- state ---------- */
+  var op = store.get("nd_op","ntc");
+  var favs = store.get("nd_favs",{ntc:[],ncell:[]});
+  if(!favs.ntc) favs.ntc=[]; if(!favs.ncell) favs.ncell=[];
+  var query = "";
+
+  function favKey(it){ return (it.code||it.builder||it.name); }
+  function isFav(it){ return favs[op].indexOf(favKey(it))>-1; }
+  function toggleFav(it){
+    var k=favKey(it), arr=favs[op], i=arr.indexOf(k);
+    if(i>-1){arr.splice(i,1);} else {arr.push(k);}
+    store.set("nd_favs",favs); render();
+  }
+
+  /* ---------- rendering ---------- */
+  function badge(it){
+    if(it.type==="menu") return '<span class="badge menu">Menu</span>';
+    if(it.free) return '<span class="badge free">Free</span>';
+    return "";
+  }
+
+  function actionsHtml(it){
+    var h='';
+    if(it.type==="builder"){ return ''; } // handled separately
+    if(it.code && (it.type==="dial"||it.type==="menu")){
+      h+='<a class="btn primary" target="_top" href="'+telHref(it.code)+'">📲 '+T('Dial')+'</a>';
+    } else if(it.type==="call"){
+      h+='<a class="btn primary" target="_top" href="'+telHref(it.code)+'">📞 Call '+it.code+'</a>';
+    } else if(it.type==="sms-only" && it.sms){
+      h+='<a class="btn primary" href="'+smsHref(it.sms.to,it.sms.body.trim())+'">✉️ Text '+it.sms.to+'</a>';
+    } else if(it.type==="info"){
+      h+='<button class="btn ghost" style="flex:1" onclick="return false">ℹ️ '+it.code+'</button>';
+    }
+    if(it.alt && (it.type==="dial"||it.type==="menu")){
+      h+='<a class="btn sms" href="'+telHref(it.alt)+'">'+it.alt+'</a>';
+    }
+    if(it.sms && it.type!=="sms-only"){
+      h+='<a class="btn sms" href="'+smsHref(it.sms.to,it.sms.body.trim())+'">✉️ SMS</a>';
+    }
+    if(it.code && it.type!=="info"){
+      h+='<button class="btn ghost" data-copy="'+it.code+'">⧉</button>';
+    }
+    return h;
+  }
+
+  function builderHtml(it){
+    var id="b_"+Math.random().toString(36).slice(2,8);
+    var fields='', b=it.builder;
+    if(b==="ntc-recharge"){
+      fields='<div><label>16-digit card PIN</label><input inputmode="numeric" data-f="pin" placeholder="e.g. 1234 5678 9012 3456"></div>';
+    } else if(b==="ncell-recharge"){
+      fields='<div><label>16-digit card PIN</label><input inputmode="numeric" data-f="pin" placeholder="e.g. 1234567890123456"></div>';
+    } else if(b==="ncell-recharge-other"){
+      fields='<div class="row"><div><label>Card PIN</label><input inputmode="numeric" data-f="pin" placeholder="16-digit PIN"></div><div><label>Their Ncell number</label><input inputmode="numeric" data-f="num" placeholder="98XXXXXXXX"></div></div>';
+    } else if(b==="ntc-transfer"){
+      fields='<div><label>Your security code</label><input inputmode="numeric" data-f="sec" placeholder="transfer PIN"></div>'+
+             '<div class="row"><div><label>Receiver number</label><input inputmode="numeric" data-f="num" placeholder="98XXXXXXXX"></div><div><label>Amount (Rs)</label><input inputmode="numeric" data-f="amt" placeholder="50"></div></div>';
+    } else if(b==="ncell-transfer"){
+      fields='<div class="row"><div><label>Receiver number</label><input inputmode="numeric" data-f="num" placeholder="98XXXXXXXX"></div><div><label>Amount (Rs)</label><input inputmode="numeric" data-f="amt" placeholder="50"></div></div>';
+    } else if(b==="forward-on"){
+      fields='<div><label>Forward all calls to</label><input inputmode="tel" data-f="num" placeholder="98XXXXXXXX"></div>';
+    }
+    return '<div class="builder" id="'+id+'" data-b="'+b+'">'+fields+
+      '<div class="codeline"><code data-out>—</code></div>'+
+      '<div class="actions"><a class="btn primary" data-dial target="_top">📲 '+T('Dial')+'</a>'+
+      '<button class="btn ghost" data-bcopy>⧉</button></div></div>';
+  }
+
+  function buildCode(b,vals){
+    var p=(vals.pin||"").replace(/\s+/g,""), n=(vals.num||"").replace(/\s+/g,""),
+        a=(vals.amt||"").replace(/\s+/g,""), s=(vals.sec||"").replace(/\s+/g,"");
+    switch(b){
+      case "ntc-recharge": return p? "*412*"+p+"#" : "";
+      case "ncell-recharge": return p? "*102*"+p+"#" : "";
+      case "ncell-recharge-other": return (p&&n)? "*102*"+p+"*"+n+"#" : "";
+      case "ntc-transfer": return (s&&n&&a)? "*422*"+s+"*"+n+"*"+a+"#" : "";
+      case "ncell-transfer": return (n&&a)? "*17122*"+n+"*"+a+"#" : "";
+      case "forward-on": return n? "**21*"+n+"#" : "";
+    }
+    return "";
+  }
+
+  function cardHtml(it){
+    return '<div class="card" data-name="'+(it.name+" "+it.desc+" "+(it.code||"")).toLowerCase()+'">'+
+      '<button class="star '+(isFav(it)?"on":"")+'" data-fav="'+favKey(it)+'" aria-label="favourite">'+(isFav(it)?"★":"☆")+'</button>'+
+      '<div class="top"><div class="ci">'+it.ic+'</div><div class="meta">'+
+        '<p class="name">'+T(it.name)+' '+badge(it)+'</p>'+
+        '<p class="desc">'+it.desc+'</p>'+
+      '</div></div>'+
+      (it.type==="builder"
+        ? builderHtml(it)
+        : '<div class="codeline"><code>'+(it.code||"")+(it.alt?'  ·  '+it.alt:'')+'</code></div><div class="actions">'+actionsHtml(it)+'</div>'
+      )+
+    '</div>';
+  }
+
+  function allItems(){
+    var cats = DATA[op].cats.slice();
+    cats.push(UNIVERSAL);
+    return cats;
+  }
+
+  function render(){
+    document.body.setAttribute("data-op",op);
+    // op switch active
+    Array.prototype.forEach.call(document.querySelectorAll("#opswitch button"),function(b){
+      b.classList.toggle("active", b.getAttribute("data-k")===op);
+    });
+
+    // quick actions
+    document.getElementById("quick").innerHTML = DATA[op].quick.map(function(q){
+      return '<a target="_top" href="'+telHref(q.code)+'"><span class="qi">'+q.ic+'</span><span class="ql">'+T(q.l)+'</span></a>';
+    }).join("");
+
+    document.getElementById("tagline").textContent=T("NTC & Ncell — every short code, one tap away");
+    document.getElementById("search").placeholder=T("Search balance, data, number, loan…");
+    document.getElementById("langBtn").textContent = lang==="np" ? "English" : "नेपाली";
+    var q = query.trim().toLowerCase();
+
+    // favourites
+    var favWrap=document.getElementById("favSection"); favWrap.innerHTML="";
+    if(!q && favs[op].length){
+      var favItems=[];
+      allItems().forEach(function(c){ c.items.forEach(function(it){ if(isFav(it)) favItems.push(it); }); });
+      if(favItems.length){
+        favWrap.innerHTML='<div class="section-title"><span class="emoji">⭐</span> '+T('Pinned')+'</div>'+favItems.map(cardHtml).join("");
+      }
+    }
+
+    // list
+    var html="", shown=0;
+    allItems().forEach(function(c){
+      var items=c.items.filter(function(it){
+        if(!q) return true;
+        return (it.name+" "+(NP[it.name]||"")+" "+it.desc+" "+(it.code||"")+" "+(it.alt||"")).toLowerCase().indexOf(q)>-1;
+      });
+      if(items.length){
+        shown+=items.length;
+        html+='<div class="section-title"><span class="emoji">'+c.emoji+'</span> '+T(c.name)+'</div>'+items.map(cardHtml).join("");
+      }
+    });
+    document.getElementById("list").innerHTML=html;
+    document.getElementById("empty").style.display = shown? "none":"block";
+    document.getElementById("q").textContent = query;
+
+    bindDynamic();
+  }
+
+  /* dynamic bindings (stars, copy, builders) */
+  function bindDynamic(){
+    Array.prototype.forEach.call(document.querySelectorAll("[data-fav]"),function(b){
+      b.onclick=function(){
+        var key=b.getAttribute("data-fav");
+        var found=null;
+        allItems().forEach(function(c){c.items.forEach(function(it){ if(favKey(it)===key) found=it; });});
+        if(found) toggleFav(found);
+      };
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-copy]"),function(b){
+      b.onclick=function(){ copy(b.getAttribute("data-copy")); };
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".builder"),function(wrap){
+      var b=wrap.getAttribute("data-b");
+      var out=wrap.querySelector("[data-out]"), dial=wrap.querySelector("[data-dial]"), bcopy=wrap.querySelector("[data-bcopy]");
+      function upd(){
+        var vals={}; Array.prototype.forEach.call(wrap.querySelectorAll("input"),function(i){ vals[i.getAttribute("data-f")]=i.value; });
+        var code=buildCode(b,vals);
+        out.textContent = code||"—";
+        if(code){ dial.setAttribute("href",telHref(code)); dial.style.opacity="1"; dial.style.pointerEvents="auto"; }
+        else { dial.removeAttribute("href"); dial.style.opacity=".45"; dial.style.pointerEvents="none"; }
+        wrap._code=code;
+      }
+      Array.prototype.forEach.call(wrap.querySelectorAll("input"),function(i){ i.oninput=upd; });
+      bcopy.onclick=function(){ if(wrap._code) copy(wrap._code); else toast("Fill the fields first"); };
+      upd();
+    });
+  }
+
+  /* ---------- events ---------- */
+  document.getElementById("opswitch").addEventListener("click",function(e){
+    var b=e.target.closest("button"); if(!b) return;
+    op=b.getAttribute("data-k"); store.set("nd_op",op); query="";
+    document.getElementById("search").value=""; document.getElementById("clrBtn").style.display="none";
+    window.scrollTo({top:0,behavior:"smooth"}); render();
+  });
+  document.getElementById("search").addEventListener("input",function(e){
+    query=e.target.value; document.getElementById("clrBtn").style.display=query?"block":"none"; render();
+  });
+  document.getElementById("clrBtn").addEventListener("click",function(){
+    query=""; document.getElementById("search").value=""; this.style.display="none"; render();
+  });
+
+  document.getElementById("langBtn").addEventListener("click",function(){ lang = lang==="np"?"en":"np"; store.set("nd_lang",lang); render(); });
+  // tapping any dial link also copies the code, so it can be pasted if the dialer does not open
+  document.addEventListener("click",function(e){
+    var a=e.target.closest&&e.target.closest('a[href^="tel:"]'); if(!a) return;
+    var code=decodeURIComponent(a.getAttribute("href").slice(4));
+    try{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(code); }catch(err){}
+    toast(code+" — opening dialer (code copied)");
+  });
+  // theme
+  var theme=store.get("nd_theme", (window.matchMedia&&matchMedia("(prefers-color-scheme:dark)").matches)?"dark":"light");
+  function applyTheme(){ document.body.setAttribute("data-theme",theme); document.getElementById("themeBtn").textContent = theme==="dark"?"☀️":"🌙"; }
+  document.getElementById("themeBtn").addEventListener("click",function(){ theme=theme==="dark"?"light":"dark"; store.set("nd_theme",theme); applyTheme(); });
+
+  document.getElementById("yr").textContent=new Date().getFullYear();
+  applyTheme();
+  render();
+})();
+</script>
+</body>
+</html>
