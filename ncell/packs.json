@@ -1,0 +1,850 @@
+{
+ "source": "https://www.ncell.com.np/en/individual/packs-and-plans",
+ "fetched": "2026-11-15T03:08Z",
+ "tabs": [
+  "Super Value Packs",
+  "Ncell Saapati",
+  "Data",
+  "Voice",
+  "SMS"
+ ],
+ "packs": [
+  {
+   "tab": "Super Value Packs",
+   "section": "Super Value Packs",
+   "name": "Super Value Pack",
+   "price": 799.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": null,
+   "data_text": "Unlimited",
+   "fup_gb": 200.0,
+   "features": {
+    "Data": "Unlimited",
+    "Voice Calls": "Unlimited",
+    "SMS": "150/day",
+    "OTT": "Lionsgate",
+    "FUP": "200 GB, 256Kbps"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/hero-799/buy",
+   "app": "https://ncellapp.ncell.com.np/67kLBt"
+  },
+  {
+   "tab": "Super Value Packs",
+   "section": "Super Value Packs",
+   "name": "Super Value Pack",
+   "price": 449.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": 7.0,
+   "data_text": "7 GB",
+   "fup_gb": 7.0,
+   "features": {
+    "Data": "7 GB",
+    "Voice Calls": "Unlimited",
+    "SMS": "100/day",
+    "OTT": "NA",
+    "FUP": "7 GB, 256Kbps"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/hero-449/buy",
+   "app": "https://ncellapp.ncell.com.np/tfttVr"
+  },
+  {
+   "tab": "Super Value Packs",
+   "section": "Super Value Packs",
+   "name": "Super Value Pack",
+   "price": 599.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": 25.0,
+   "data_text": "25 GB",
+   "fup_gb": 25.0,
+   "features": {
+    "Data": "25 GB",
+    "Voice Calls": "Unlimited",
+    "SMS": "100/day",
+    "OTT": "NA",
+    "FUP": "25 GB, 256Kbps"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/hero-599/buy",
+   "app": "https://ncellapp.ncell.com.np/CvAdc9"
+  },
+  {
+   "tab": "Super Value Packs",
+   "section": "Super Value Packs",
+   "name": "Super Value Pack",
+   "price": 699.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": 50.0,
+   "data_text": "50 GB",
+   "fup_gb": 50.0,
+   "features": {
+    "Data": "50 GB",
+    "Voice Calls": "Unlimited",
+    "SMS": "100/day",
+    "OTT": "NA",
+    "FUP": "50 GB, 256Kbps"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/hero-699/buy",
+   "app": "https://ncellapp.ncell.com.np/yDn535"
+  },
+  {
+   "tab": "Super Value Packs",
+   "section": "Super Value Packs",
+   "name": "Super Value Pack",
+   "price": 1199.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": 1.0,
+   "data_text": "Unlimited data, 1 GB Roaming Data in 20+ Countries",
+   "fup_gb": 200.0,
+   "features": {
+    "Data": "Unlimited data, 1 GB Roaming Data in 20+ Countries",
+    "Voice Calls": "Unlimited",
+    "SMS": "150/day",
+    "OTT": "Lionsgate",
+    "FUP": "200 GB, 256Kbps"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/1199-roaming-pack/buy",
+   "app": "https://ncellapp.ncell.com.np/BeSYfT"
+  },
+  {
+   "tab": "Super Value Packs",
+   "section": "Super Value Packs",
+   "name": "Super Value Pack",
+   "price": 2299.0,
+   "validity": "90 Days",
+   "days": 90,
+   "data_gb": null,
+   "data_text": "Unlimited",
+   "fup_gb": 200.0,
+   "features": {
+    "Data": "Unlimited",
+    "Voice Calls": "Unlimited",
+    "SMS": "150/day",
+    "OTT": "Lionsgate",
+    "FUP": "200 GB, 256Kbps"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/hero-2299/buy",
+   "app": "https://ncellapp.ncell.com.np/WKLKNs"
+  },
+  {
+   "tab": "Super Value Packs",
+   "section": "Super Value Packs",
+   "name": "Super Value Pack",
+   "price": 4499.0,
+   "validity": "180 Days",
+   "days": 180,
+   "data_gb": null,
+   "data_text": "Unlimited",
+   "fup_gb": 200.0,
+   "features": {
+    "Data": "Unlimited",
+    "Voice Calls": "Unlimited",
+    "SMS": "150/day",
+    "OTT": "Lionsgate",
+    "FUP": "200 GB, 256Kbps"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/hero-4499/buy",
+   "app": "https://ncellapp.ncell.com.np/TXbV4X"
+  },
+  {
+   "tab": "Super Value Packs",
+   "section": "Super Value Packs",
+   "name": "Super Value Pack",
+   "price": 6999.0,
+   "validity": "365 Days",
+   "days": 365,
+   "data_gb": null,
+   "data_text": "Unlimited",
+   "fup_gb": 200.0,
+   "features": {
+    "Data": "Unlimited",
+    "Voice Calls": "Unlimited",
+    "SMS": "150/day",
+    "OTT": "Lionsgate",
+    "FUP": "200 GB, 256Kbps"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/hero-8499/buy",
+   "app": "https://ncellapp.ncell.com.np/4X9MY7"
+  },
+  {
+   "tab": "Super Value Packs",
+   "section": "Super Value Renewal Packs",
+   "name": "Super Value Renewal",
+   "price": 799.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": 200.0,
+   "data_text": "200 GB",
+   "fup_gb": null,
+   "features": {
+    "Data": "200 GB",
+    "Voice Calls": "All Nepal Unlimited",
+    "SMS": "150/day",
+    "FUP": "256Kbps"
+   },
+   "web": null,
+   "app": "https://ncellapp.ncell.com.np/RgdvE2"
+  },
+  {
+   "tab": "Super Value Packs",
+   "section": "Super Value Renewal Packs",
+   "name": "Super Value Renewal",
+   "price": 449.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": 7.0,
+   "data_text": "7 GB",
+   "fup_gb": null,
+   "features": {
+    "Data": "7 GB",
+    "Voice Calls": "All Nepal Unlimited",
+    "SMS": "100/day",
+    "FUP": "256Kbps"
+   },
+   "web": null,
+   "app": "https://ncellapp.ncell.com.np/rDxPqu"
+  },
+  {
+   "tab": "Super Value Packs",
+   "section": "Super Value Renewal Packs",
+   "name": "Super Value Renewal",
+   "price": 599.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": 25.0,
+   "data_text": "25 GB",
+   "fup_gb": null,
+   "features": {
+    "Data": "25 GB",
+    "Voice Calls": "All Nepal Unlimited",
+    "SMS": "100/day",
+    "FUP": "256Kbps"
+   },
+   "web": null,
+   "app": "https://ncellapp.ncell.com.np/EDQTtN"
+  },
+  {
+   "tab": "Super Value Packs",
+   "section": "Super Value Renewal Packs",
+   "name": "Super Value Renewal",
+   "price": 699.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": 50.0,
+   "data_text": "50 GB",
+   "fup_gb": null,
+   "features": {
+    "Data": "50 GB",
+    "Voice Calls": "All Nepal Unlimited",
+    "SMS": "100/day",
+    "FUP": "256Kbps"
+   },
+   "web": null,
+   "app": "https://ncellapp.ncell.com.np/2bxRxC"
+  },
+  {
+   "tab": "Ncell Saapati",
+   "section": "Available Saapati Services",
+   "name": "Voice Saapati UL",
+   "price": 99.0,
+   "validity": "7 Days",
+   "days": 7,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Service fee (Inc. tax)": "Rs. 2.48",
+    "What you get in Saapati?": "Unlimited All Nepal Voice",
+    "Validity": "7 Days",
+    "How to get?": "*9988#"
+   },
+   "web": null,
+   "app": "https://ncellapp.ncell.com.np/zU64Rz"
+  },
+  {
+   "tab": "Ncell Saapati",
+   "section": "Available Saapati Services",
+   "name": "Data Saapati",
+   "price": 99.0,
+   "validity": "3 Days",
+   "days": 3,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Service fee (Inc. tax)": "Rs. 2.48",
+    "What you get in Saapati?": "Unlimited Data (10 GB High Speed) +100 SMS/day",
+    "Validity": "3 Days",
+    "How to get?": "*9988#"
+   },
+   "web": null,
+   "app": "https://ncellapp.ncell.com.np/zU64Rz"
+  },
+  {
+   "tab": "Ncell Saapati",
+   "section": "Available Saapati Services",
+   "name": "Balance Saapati",
+   "price": 40.0,
+   "validity": "-",
+   "days": null,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Service fee (Inc. tax)": "Rs. 2.48",
+    "What you get in Saapati?": "Rs. 40 Main Balance",
+    "Validity": "-",
+    "How to get?": "*9988#"
+   },
+   "web": null,
+   "app": "https://ncellapp.ncell.com.np/zU64Rz"
+  },
+  {
+   "tab": "Ncell Saapati",
+   "section": "Available Saapati Services",
+   "name": "Voice Saapati",
+   "price": 50.0,
+   "validity": "3 Days",
+   "days": 3,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Service fee (Inc. tax)": "Rs. 2.48",
+    "What you get in Saapati?": "100 Min All-Nepal Calls",
+    "Validity": "3 Days",
+    "How to get?": "*9988#"
+   },
+   "web": null,
+   "app": "https://ncellapp.ncell.com.np/zU64Rz"
+  },
+  {
+   "tab": "Ncell Saapati",
+   "section": "Available Saapati Services",
+   "name": "Data Saapati",
+   "price": 50.0,
+   "validity": "1 Day",
+   "days": 1,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Service fee (Inc. tax)": "Rs. 2.48",
+    "What you get in Saapati?": "Unlimited data (5 GB High Speed) + 100 SMS",
+    "Validity": "1 Day",
+    "How to get?": "*9988#"
+   },
+   "web": null,
+   "app": "https://ncellapp.ncell.com.np/zU64Rz"
+  },
+  {
+   "tab": "Data",
+   "section": "Data",
+   "name": "Hourly Data",
+   "price": 35.0,
+   "validity": "3 Hours",
+   "days": 0.12,
+   "data_gb": null,
+   "data_text": "Unlimited Data",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "Unlimited Data"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/rs-35-hourly-data/buy",
+   "app": "https://ncellapp.ncell.com.np/HVPnLA"
+  },
+  {
+   "tab": "Data",
+   "section": "Data",
+   "name": "Data Pack",
+   "price": 50.0,
+   "validity": "1 Day",
+   "days": 1,
+   "data_gb": 5.0,
+   "data_text": "5GB Unlimited Data + 100 SMS/Day",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "5GB Unlimited Data + 100 SMS/Day"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/50-ul-combo/buy",
+   "app": "https://ncellapp.ncell.com.np/tHQzhD"
+  },
+  {
+   "tab": "Data",
+   "section": "Data",
+   "name": "Data Pack",
+   "price": 99.0,
+   "validity": "3 Days",
+   "days": 3,
+   "data_gb": 10.0,
+   "data_text": "10GB Unlimited Data + 100 SMS/Day",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "10GB Unlimited Data + 100 SMS/Day"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/99-ul-combo/buy",
+   "app": "https://ncellapp.ncell.com.np/Yx5Aey"
+  },
+  {
+   "tab": "Data",
+   "section": "Data",
+   "name": "Double Majja Pack",
+   "price": 150.0,
+   "validity": "7 Days",
+   "days": 7,
+   "data_gb": 7.0,
+   "data_text": "7 GB",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "7 GB"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/5gb-double-majja-pack/buy",
+   "app": "https://ncellapp.ncell.com.np/frzqWP"
+  },
+  {
+   "tab": "Data",
+   "section": "Data",
+   "name": "Data Pack",
+   "price": 200.0,
+   "validity": "7 Days",
+   "days": 7,
+   "data_gb": 20.0,
+   "data_text": "20GB Unlimited Data + 100 SMS/Day",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "20GB Unlimited Data + 100 SMS/Day"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/200-ul-combo/buy",
+   "app": "https://ncellapp.ncell.com.np/mXxHrc"
+  },
+  {
+   "tab": "Data",
+   "section": "Data",
+   "name": "Data Pack",
+   "price": 249.0,
+   "validity": "7 Days",
+   "days": 7,
+   "data_gb": 20.0,
+   "data_text": "20GB Unlimited Data + Unlimited Calls + 100 SMS/Day",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "20GB Unlimited Data + Unlimited Calls + 100 SMS/Day"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/249-ul-combo/buy",
+   "app": "https://ncellapp.ncell.com.np/u9GqZx"
+  },
+  {
+   "tab": "Data",
+   "section": "Data",
+   "name": "Data Pack",
+   "price": 349.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": 12.0,
+   "data_text": "12 GB",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "12 GB"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/349-data/buy",
+   "app": "https://ncellapp.ncell.com.np/edgXFq"
+  },
+  {
+   "tab": "Data",
+   "section": "Data",
+   "name": "Data Pack",
+   "price": 399.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": 1.0,
+   "data_text": "1 GB / Day",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "1 GB / Day"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/399-data/buy",
+   "app": "https://ncellapp.ncell.com.np/Q6KAxu"
+  },
+  {
+   "tab": "Data",
+   "section": "Data",
+   "name": "Data Pack",
+   "price": 499.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": 30.0,
+   "data_text": "30 GB",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "30 GB"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/499-data/buy",
+   "app": "https://ncellapp.ncell.com.np/67dU87"
+  },
+  {
+   "tab": "Data",
+   "section": "Data Combo Pack",
+   "name": "Data Combo Pack",
+   "price": 949.0,
+   "validity": "90 Days",
+   "days": 90,
+   "data_gb": 3.0,
+   "data_text": "Unlimited Calls + 3GB Data",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "Unlimited Calls + 3GB Data"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/combo-949/buy",
+   "app": "https://ncellapp.ncell.com.np/yxAxVD"
+  },
+  {
+   "tab": "Data",
+   "section": "Data Combo Pack",
+   "name": "Data Combo Pack",
+   "price": 1699.0,
+   "validity": "90 Days",
+   "days": 90,
+   "data_gb": 25.0,
+   "data_text": "Unlimited Calls + 25 GB per month (FUP:256 Kbps) + 100SMS/Day",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "Unlimited Calls + 25 GB per month (FUP:256 Kbps) + 100SMS/Day"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/combo-1699/buy",
+   "app": "https://ncellapp.ncell.com.np/nuQxvV"
+  },
+  {
+   "tab": "Data",
+   "section": "Data Combo Pack",
+   "name": "Data Combo Pack",
+   "price": 3499.0,
+   "validity": "360 Days",
+   "days": 360,
+   "data_gb": 12.0,
+   "data_text": "Unlimited Calls + 12GB Data",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "Unlimited Calls + 12GB Data"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/combo-3499/buy",
+   "app": "https://ncellapp.ncell.com.np/CsTdTH"
+  },
+  {
+   "tab": "Data",
+   "section": "Data Combo Pack",
+   "name": "Data Combo Pack",
+   "price": 6499.0,
+   "validity": "365 Days",
+   "days": 365,
+   "data_gb": 25.0,
+   "data_text": "Unlimited Calls + 25 GB per month (FUP:256 Kbps) + 100SMS/Day",
+   "fup_gb": null,
+   "features": {
+    "Data Volume": "Unlimited Calls + 25 GB per month (FUP:256 Kbps) + 100SMS/Day"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/combo-6499/buy",
+   "app": "https://ncellapp.ncell.com.np/D2dtNb"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "Night Voice Pack",
+   "price": 15.0,
+   "validity": "1 Day",
+   "days": 1,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Ncell to Ncell Voice": "Unlimited",
+    "Time": "10 PM to 5 AM"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/night-1-day-unlimited-voice-pack/buy",
+   "app": "https://ncellapp.ncell.com.np/MSP7Gk"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "Day Unlimited Voice Pack (5AM to 5PM) with 100 Ncell to Ncell SMS",
+   "price": 22.0,
+   "validity": "1 Day",
+   "days": 1,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Ncell to Ncell Voice": "Unlimited",
+    "All Network Voice": "-"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/day-1-day-unlimited-voice-pack/buy",
+   "app": "https://ncellapp.ncell.com.np/3wgbfh"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "Voice Pack",
+   "price": 25.0,
+   "validity": "1 Day",
+   "days": 1,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Ncell to Ncell Voice": "-",
+    "All Network Voice": "40 mins"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/1-day-all-nepal-voice-1/buy",
+   "app": null
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "Voice Pack",
+   "price": 30.0,
+   "validity": "1 Day",
+   "days": 1,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Ncell to Ncell Voice": "Unlimited",
+    "All Network Voice": "-"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/1-day-unlimited-ncell-voice-1/buy",
+   "app": "https://ncellapp.ncell.com.np/EZVG3g"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "Voice Pack",
+   "price": 39.0,
+   "validity": "1 Day",
+   "days": 1,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Ncell to Ncell Voice": "-",
+    "All Network Voice": "Unlimited"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/rs-39-unlimited-all-nepal/buy",
+   "app": "https://ncellapp.ncell.com.np/qQSXGn"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "Voice Pack",
+   "price": 50.0,
+   "validity": "3 Days",
+   "days": 3,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Ncell to Ncell Voice": "-",
+    "All Network Voice": "100 mins"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/rs-50-day-unlimited-voice/buy",
+   "app": "https://ncellapp.ncell.com.np/NH5nKY"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "Voice Pack",
+   "price": 99.0,
+   "validity": "7 Days",
+   "days": 7,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Ncell to Ncell Voice": "-",
+    "All Network Voice": "Unlimited"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/rs-99-ul-all-nepal/buy",
+   "app": "https://ncellapp.ncell.com.np/TeMSRB"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "Voice Pack",
+   "price": 199.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Ncell to Ncell Voice": "-",
+    "All Network Voice": "299 mins"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/rs-199-all-nepal/buy",
+   "app": "https://ncellapp.ncell.com.np/TdUsXz"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "Voice Pack",
+   "price": 329.0,
+   "validity": "30 Days",
+   "days": 30,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Ncell to Ncell Voice": "-",
+    "All Network Voice": "Unlimited"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/329-voice/buy",
+   "app": "https://ncellapp.ncell.com.np/ntHS2f"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "Voice Pack",
+   "price": 599.0,
+   "validity": "84 Days",
+   "days": 84,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Ncell to Ncell Voice": "-",
+    "All Network Voice": "999 mins"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/rs-599-all-nepal/buy",
+   "app": "https://ncellapp.ncell.com.np/78zL2A"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "India Call",
+   "price": 80.0,
+   "validity": "1 Day",
+   "days": 1,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Resources": "20 mins India Call"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/international-80rs-pack/buy",
+   "app": "https://ncellapp.ncell.com.np/VWKT9E"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "India Call",
+   "price": 270.0,
+   "validity": "7 Days",
+   "days": 7,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Resources": "75 mins India Call"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/international-270rs-pack/buy",
+   "app": "https://ncellapp.ncell.com.np/hGhtd3"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "India Rate Cutter",
+   "price": 49.0,
+   "validity": "28 Days",
+   "days": 28,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Resources": "India call at Rs 2.99/min ex tax (Rs 3.79/min with tax)"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/rs-49-india-rate-cutter/buy",
+   "app": "https://ncellapp.ncell.com.np/GSpLK2"
+  },
+  {
+   "tab": "Voice",
+   "section": "Voice",
+   "name": "International Rate Cutter",
+   "price": 49.0,
+   "validity": "28 Days",
+   "days": 28,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "Resource": "25% Discount on calls to 7 countries*"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/international-49rs-pack/buy",
+   "app": "https://ncellapp.ncell.com.np/RzPtwB"
+  },
+  {
+   "tab": "SMS",
+   "section": "SMS",
+   "name": "SMS Pack",
+   "price": 15.0,
+   "validity": "1 Day",
+   "days": 1,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "No. of SMS": "100"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/1--day-all-nepal-sms/buy",
+   "app": "https://ncellapp.ncell.com.np/kLrqUp"
+  },
+  {
+   "tab": "SMS",
+   "section": "SMS",
+   "name": "SMS Pack",
+   "price": 45.0,
+   "validity": "7 Days",
+   "days": 7,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "No. of SMS": "300"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/7--day-all-nepal-sms/buy",
+   "app": "https://ncellapp.ncell.com.np/ca3c2G"
+  },
+  {
+   "tab": "SMS",
+   "section": "SMS",
+   "name": "SMS Pack",
+   "price": 98.0,
+   "validity": "28 Days",
+   "days": 28,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "No. of SMS": "300"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/28--day-all-nepal-sms/buy",
+   "app": "https://ncellapp.ncell.com.np/Ur9NSn"
+  },
+  {
+   "tab": "SMS",
+   "section": "SMS",
+   "name": "SMS Pack",
+   "price": 125.0,
+   "validity": "28 Days",
+   "days": 28,
+   "data_gb": null,
+   "data_text": "",
+   "fup_gb": null,
+   "features": {
+    "No. of SMS": "850"
+   },
+   "web": "https://www.ncell.com.np/en/individual/data-and-voice/rs-125-28-day-all-nepal-sms-pack/buy",
+   "app": "https://ncellapp.ncell.com.np/xQwFPq"
+  }
+ ]
+}

@@ -7,7 +7,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.telephony.TelephonyManager;
+import org.json.JSONObject;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
@@ -18,6 +23,7 @@ public class MainActivity extends Activity implements DialogInterface.OnClickLis
     private WebView web;
     private Uri pending;
     private Uri confirmUri;
+    private String pendingUssd;
 
     @Override
     public void onClick(DialogInterface d, int which) {
@@ -31,8 +37,10 @@ public class MainActivity extends Activity implements DialogInterface.OnClickLis
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
-        s.setUserAgentString(s.getUserAgentString() + " NepDialApp/1.0");
+        s.setUserAgentString(s.getUserAgentString() + " NepDialApp/1.1");
         web.setWebViewClient(new Client(this));
+        // Only the bundled page is ever loaded in this WebView; every http(s) link opens in the browser.
+        web.addJavascriptInterface(new Bridge(this), "NepDial");
         setContentView(web);
         if (b != null) web.restoreState(b); else web.loadUrl("file:///android_asset/index.html");
     }
@@ -83,6 +91,39 @@ public class MainActivity extends Activity implements DialogInterface.OnClickLis
         }
     }
 
+    /** Read-only codes whose single reply can be shown inside the app. */
+    private static boolean readOnly(String code) {
+        return code.equals("*901#") || code.equals("*101#") || code.equals("*903#") || code.equals("*103#") || code.equals("*144#");
+    }
+
+    /** Runs a read-only USSD code and hands the reply to the page; falls back to a normal call. */
+    void ussd(String code) {
+        if (!readOnly(code)) return;
+        Uri u = Uri.parse("tel:" + Uri.encode(code));
+        if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            pendingUssd = code;
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, REQ_CALL);
+            return;
+        }
+        if (Build.VERSION.SDK_INT < 26) { reply(code, "", false); dial(u); return; }
+        try {
+            TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+            tm.sendUssdRequest(code, new UssdReply(this, code), new Handler(Looper.getMainLooper()));
+        } catch (Exception e) {
+            reply(code, "", false);
+            dial(u);
+        }
+    }
+
+    void ussdFailed(String code) {
+        reply(code, "", false);
+        dial(Uri.parse("tel:" + Uri.encode(code)));
+    }
+
+    void reply(String code, String text, boolean ok) {
+        web.evaluateJavascript("window.onUssdReply&&window.onUssdReply(" + JSONObject.quote(code) + "," + JSONObject.quote(text) + "," + ok + ")", null);
+    }
+
     private void openDialer(Uri u) {
         try { startActivity(new Intent(Intent.ACTION_DIAL, u)); }
         catch (Exception e) { Toast.makeText(this, "This device cannot make calls", Toast.LENGTH_SHORT).show(); }
@@ -90,7 +131,14 @@ public class MainActivity extends Activity implements DialogInterface.OnClickLis
 
     @Override
     public void onRequestPermissionsResult(int code, String[] perms, int[] res) {
-        if (code != REQ_CALL || pending == null) return;
+        if (code != REQ_CALL) return;
+        if (pendingUssd != null) {
+            String c = pendingUssd; pendingUssd = null;
+            if (res.length > 0 && res[0] == PackageManager.PERMISSION_GRANTED) ussd(c);
+            else { Toast.makeText(this, "Allow phone permission to see replies here", Toast.LENGTH_LONG).show(); reply(c, "", false); openDialer(Uri.parse("tel:" + Uri.encode(c))); }
+            return;
+        }
+        if (pending == null) return;
         Uri u = pending; pending = null;
         if (res.length > 0 && res[0] == PackageManager.PERMISSION_GRANTED) {
             dial(u);

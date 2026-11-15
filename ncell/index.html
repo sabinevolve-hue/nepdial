@@ -4,107 +4,127 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1B1530">
-<meta name="description" content="Every Ncell short code on one keypad. Tap to check balance, buy data, recharge, transfer or borrow. Unofficial helper, works offline.">
+<meta name="description" content="Live Ncell pack prices, a data planner and every Ncell short code. Unofficial helper that works offline.">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>Short codes for Ncell</title>
 <style>
   :root{
-    --ink:#1B1530;        /* aubergine night: page */
-    --plum:#2A2147;       /* raised surface */
-    --plum-2:#352A5A;     /* pressed / hover surface */
-    --line:#44397A;       /* borders */
-    --petal:#F3EEFF;      /* primary text */
-    --haze:#B4AAD4;       /* secondary text */
-    --marigold:#FFB23E;   /* the one accent: anything that dials */
-    --marigold-ink:#2B1B00;
-    --warn:#FF8A7A;
-    --r-key:22px; --r-sheet:28px; --r-ctl:14px;
+    --ink:#1B1530; --plum:#2A2147; --plum-2:#352A5A; --line:#44397A;
+    --petal:#F3EEFF; --haze:#B9B0D8;
+    --marigold:#FFB23E; --marigold-ink:#2B1B00;      /* actions only */
+    --rose:#FF7AA8; --sky:#7CC4FF; --mint:#6FE3C4; --warn:#FF8A7A;   /* pictures and charts only */
+    --r-card:22px; --r-ctl:14px; --r-sheet:28px;
     --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Noto Sans",Helvetica,Arial,sans-serif;
     --round:ui-rounded,"SF Pro Rounded","Nunito",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;height:100%}
-  body{
-    background:var(--ink);color:var(--petal);font-family:var(--font);font-size:16px;line-height:1.45;
-    -webkit-font-smoothing:antialiased;overscroll-behavior-y:none;
-  }
-  button,input{font:inherit;color:inherit}
+  body{background:var(--ink);color:var(--petal);font-family:var(--font);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+  button,input,select{font:inherit;color:inherit}
   button{cursor:pointer}
+  a{color:inherit}
   :focus-visible{outline:3px solid var(--marigold);outline-offset:3px;border-radius:8px}
-  .app{max-width:460px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;
-       padding:calc(14px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom))}
+  h1,h2,h3,p{margin:0}
+  .app{max-width:480px;margin:0 auto;min-height:100%;padding:calc(12px + env(safe-area-inset-top)) 16px calc(96px + env(safe-area-inset-bottom))}
+  .view{display:none}
+  .view.on{display:block}
 
-  /* top bar */
-  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .bar h1{font-size:17px;font-weight:650;margin:0;letter-spacing:-.01em}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .bar h1{font-size:17px;font-weight:650;letter-spacing:-.01em}
   .bar small{display:block;font-size:12.5px;font-weight:400;color:var(--haze)}
-  .find{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:transparent;display:grid;place-items:center;transition:background .15s}
-  .find:active{background:var(--plum-2)}
-  .find svg{width:20px;height:20px;stroke:var(--petal)}
+  .round-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:transparent;display:grid;place-items:center;transition:background .15s}
+  .round-btn:active{background:var(--plum-2)}
+  .round-btn svg{width:20px;height:20px}
 
-  /* the display: the code itself is the hero */
-  .display{margin-top:18px;padding:20px 20px 18px;border-radius:26px;background:
-      radial-gradient(120% 140% at 100% 0%,rgba(255,178,62,.16),transparent 55%),var(--plum);
-    border:1px solid var(--line)}
-  .display .what{font-size:14px;color:var(--haze);min-height:20px}
-  .display .code{font-family:var(--round);font-weight:800;font-size:clamp(44px,15vw,68px);line-height:1.02;
-    letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin:4px 0 14px;word-break:break-all;min-height:1.02em}
-  .display .code .caret{display:inline-block;width:.08em;height:.8em;background:var(--marigold);margin-left:.06em;vertical-align:-.04em;animation:blink 1s steps(2) infinite}
-  @keyframes blink{50%{opacity:0}}
-  .display .row{display:flex;gap:10px}
-  .dial{flex:1;min-height:54px;border:0;border-radius:var(--r-ctl);background:var(--marigold);color:var(--marigold-ink);
-    font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;
-    transition:transform .12s,filter .15s}
-  .dial:active{transform:scale(.97);filter:brightness(.92)}
-  .dial svg{width:19px;height:19px;fill:var(--marigold-ink)}
-  .dial[aria-disabled="true"]{opacity:.4;pointer-events:none}
-  .ghost{min-width:54px;min-height:54px;border-radius:var(--r-ctl);border:1px solid var(--line);background:transparent;
-    display:grid;place-items:center;transition:background .15s}
-  .ghost:active{background:var(--plum-2)}
-  .ghost svg{width:20px;height:20px;stroke:var(--petal);fill:none}
-  .ghost.on svg{fill:var(--marigold);stroke:var(--marigold)}
+  /* hero: picture + SIM tiles */
+  .hero{position:relative;border-radius:26px;overflow:hidden;border:1px solid var(--line);background:var(--plum)}
+  .hero svg.scene{display:block;width:100%;height:auto}
+  .hero .hello{position:absolute;left:18px;top:16px;right:18px}
+  .hero .hello b{display:block;font-family:var(--round);font-size:26px;font-weight:800;letter-spacing:-.01em;line-height:1.1}
+  .hero .hello span{font-size:14px;color:#EADFFF}
+  .hero .hello{text-shadow:0 1px 10px rgba(40,16,80,.55)}
+  .sim{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px}
+  .sim a{min-height:86px;border-radius:16px;background:var(--ink);border:1px solid var(--line);padding:10px;text-decoration:none;display:flex;flex-direction:column;justify-content:space-between;transition:transform .12s,border-color .15s}
+  .sim a:active{transform:scale(.96);border-color:var(--marigold)}
+  .sim a span{font-size:12.5px;color:var(--haze)}
+  .sim a b{font-family:var(--round);font-size:19px;font-weight:800;line-height:1.1;word-break:break-word}
+  .sim a em{font-style:normal;font-size:12px;color:var(--marigold);font-weight:600}
+  .reply{margin:0 12px 12px;padding:12px 14px;border-radius:14px;background:var(--ink);border:1px solid var(--line);font-size:14px;white-space:pre-wrap;display:none}
+  .reply.on{display:block}
+  .reply small{display:block;color:var(--haze);font-size:12px;margin-top:6px}
 
-  /* keypad: each key is a family of services */
-  .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
-  .key{aspect-ratio:1/0.86;border-radius:var(--r-key);border:1px solid var(--line);background:var(--plum);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px;
-    transition:transform .12s,background .15s,border-color .15s}
-  .key:active{transform:scale(.94);background:var(--plum-2);border-color:var(--marigold)}
-  .key b{font-family:var(--round);font-size:30px;font-weight:700;line-height:1}
-  .key span{font-size:13px;color:var(--haze);font-weight:500}
-  .key.all b{color:var(--marigold)}
+  .sec{margin-top:24px}
+  .sec-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+  .sec-h h2{font-size:18px;font-weight:650;letter-spacing:-.01em}
+  .sec-h button,.sec-h a{background:none;border:0;font-size:14px;color:var(--marigold);font-weight:600;padding:8px 0;text-decoration:none}
+  .lede{font-size:14px;color:var(--haze);margin:-4px 0 12px;max-width:60ch}
 
-  /* shortcuts under the pad */
-  .strip{margin-top:18px}
-  .strip h2{font-size:14px;font-weight:600;color:var(--haze);margin:0 0 8px}
-  .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
-  .chips::-webkit-scrollbar{display:none}
-  .chip{flex:none;border:1px solid var(--line);background:transparent;border-radius:999px;padding:9px 14px;min-height:44px;
-    display:flex;align-items:center;gap:8px;font-size:14px;white-space:nowrap;transition:background .15s}
-  .chip:active{background:var(--plum-2)}
-  .chip i{font-style:normal;font-family:var(--round);font-weight:700;color:var(--marigold)}
-  .hint{font-size:13.5px;color:var(--haze);margin:0}
+  /* quick actions with pictures */
+  .acts4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .act{border:0;background:transparent;padding:0;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12.5px;color:var(--petal);text-align:center;line-height:1.2}
+  .act i{width:100%;aspect-ratio:1;border-radius:20px;background:var(--plum);border:1px solid var(--line);display:grid;place-items:center;transition:transform .12s,border-color .15s}
+  .act:active i{transform:scale(.93);border-color:var(--marigold)}
+  .act svg{width:54%;height:54%}
 
-  .foot{margin-top:auto;padding-top:22px;font-size:12.5px;color:var(--haze);text-align:center}
-  .foot button{background:none;border:0;color:var(--petal);text-decoration:underline;padding:8px}
+  /* pack cards */
+  .rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;margin:0 -16px;padding-left:16px;padding-right:16px;scrollbar-width:none}
+  .rail::-webkit-scrollbar{display:none}
+  .rail .pack{flex:0 0 78%;scroll-snap-align:center}
+  .pack{position:relative;border-radius:var(--r-card);border:1px solid var(--line);background:linear-gradient(160deg,var(--plum-2),var(--plum) 60%);padding:16px;overflow:hidden}
+  .pack .why{display:inline-block;font-size:12.5px;font-weight:600;color:var(--marigold-ink);background:var(--marigold);border-radius:999px;padding:2px 10px;margin-bottom:10px}
+  .pack .row1{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .pack .head{font-family:var(--round);font-size:30px;font-weight:800;line-height:1.05;letter-spacing:-.01em}
+  .pack .sub{font-size:13.5px;color:var(--haze);margin-top:3px}
+  .pack .price{text-align:right;flex:none}
+  .pack .price b{font-family:var(--round);font-size:24px;font-weight:800;display:block;line-height:1.05}
+  .pack .price small{font-size:12.5px;color:var(--haze)}
+  .meter{height:8px;border-radius:99px;background:var(--ink);margin:14px 0 10px;overflow:hidden}
+  .meter i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--sky),var(--mint))}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tags span{font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--petal)}
+  .pack .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+  .pack .rate{font-size:13.5px;color:var(--haze)}
+  .pack .rate b{color:var(--mint);font-weight:650}
+  .go{min-width:84px;min-height:46px;padding:0 18px;border:0;border-radius:var(--r-ctl);background:var(--marigold);color:var(--marigold-ink);font-weight:700;font-size:15px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;transition:transform .12s,filter .15s}
+  .go:active{transform:scale(.95);filter:brightness(.92)}
+  .go.alt{background:transparent;border:1px solid var(--line);color:var(--petal)}
+  .go[aria-disabled="true"]{opacity:.4;pointer-events:none}
+  .stack{display:grid;gap:12px}
+  .stamp{font-size:12.5px;color:var(--haze);margin-top:14px}
+  .stamp a{color:var(--petal)}
 
-  /* sheet */
-  .scrim{position:fixed;inset:0;background:rgba(10,6,24,.62);opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
-  .scrim.open{opacity:1;pointer-events:auto}
-  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:11;max-width:460px;margin:0 auto;max-height:88vh;
-    background:var(--plum);border:1px solid var(--line);border-bottom:0;border-radius:var(--r-sheet) var(--r-sheet) 0 0;
-    transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
-  .sheet.open{transform:none}
-  .sheet header{display:flex;align-items:center;gap:12px;padding:16px 18px 10px}
-  .sheet header .digit{font-family:var(--round);font-weight:800;font-size:34px;line-height:1;color:var(--marigold);min-width:26px;text-align:center}
-  .sheet header h2{flex:1;margin:0;font-size:19px;font-weight:650;letter-spacing:-.01em}
-  .sheet header p{margin:0;font-size:13px;color:var(--haze);font-weight:400}
-  .x{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:transparent;font-size:18px;line-height:1}
-  .x:active{background:var(--plum-2)}
-  .body{overflow-y:auto;padding:4px 18px calc(22px + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
-  .search{width:100%;min-height:50px;border-radius:var(--r-ctl);border:1px solid var(--line);background:var(--ink);padding:0 14px;margin-bottom:8px}
+  .seg{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px 10px;padding:0 16px}
+  .seg::-webkit-scrollbar{display:none}
+  .seg button{flex:none;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:transparent;font-size:14.5px;font-weight:600;color:var(--haze);white-space:nowrap;transition:background .15s,color .15s}
+  .seg button[aria-pressed="true"]{background:var(--petal);color:var(--ink);border-color:var(--petal)}
+  .seg.small button{min-height:38px;font-size:13.5px;padding:0 13px;font-weight:500}
+  .seg.small button[aria-pressed="true"]{background:var(--plum-2);color:var(--petal);border-color:var(--marigold)}
+  .sortrow{display:flex;align-items:center;justify-content:space-between;font-size:13.5px;color:var(--haze);margin-bottom:12px}
+  .sortrow select{background:var(--plum);border:1px solid var(--line);border-radius:10px;min-height:38px;padding:0 10px}
+
+  /* planner */
+  .panel{border-radius:var(--r-card);border:1px solid var(--line);background:var(--plum);padding:16px}
+  .need{display:flex;align-items:center;gap:16px}
+  .need svg{width:132px;height:132px;flex:none}
+  .need .n b{font-family:var(--round);font-size:44px;font-weight:800;line-height:1}
+  .need .n span{display:block;font-size:14px;color:var(--haze)}
+  .legend{display:grid;gap:4px;margin-top:8px;font-size:12.5px;color:var(--haze)}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px}
+  .slider{margin-top:16px}
+  .slider label{display:flex;justify-content:space-between;font-size:14.5px;margin-bottom:4px}
+  .slider label b{font-family:var(--round);font-weight:700}
+  input[type=range]{width:100%;height:36px;accent-color:var(--marigold);background:transparent}
+
+  /* code groups */
+  .groups{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .group{border:1px solid var(--line);background:var(--plum);border-radius:20px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:8px;min-height:120px;transition:transform .12s,border-color .15s}
+  .group:active{transform:scale(.97);border-color:var(--marigold)}
+  .group svg{width:38px;height:38px}
+  .group b{font-size:16px;font-weight:650}
+  .group span{font-size:13px;color:var(--haze)}
+  .search{width:100%;min-height:50px;border-radius:var(--r-ctl);border:1px solid var(--line);background:var(--plum);padding:0 14px;margin-bottom:12px}
   .search::placeholder{color:var(--haze)}
   .grp{font-size:13px;font-weight:600;color:var(--haze);margin:16px 0 2px}
 
@@ -112,23 +132,16 @@
   .item:last-child{border-bottom:0}
   .item .top{display:flex;align-items:flex-start;gap:12px}
   .item .txt{flex:1;min-width:0}
-  .item h3{margin:0;font-size:16px;font-weight:600}
-  .item p{margin:2px 0 0;font-size:13.5px;color:var(--haze)}
-  .item .c{font-family:var(--round);font-weight:700;font-size:17px;color:var(--petal);margin-top:6px;font-variant-numeric:tabular-nums;word-break:break-all}
+  .item h3{font-size:16px;font-weight:600}
+  .item p{margin-top:2px;font-size:13.5px;color:var(--haze)}
+  .item .c{font-family:var(--round);font-weight:700;font-size:17px;margin-top:6px;font-variant-numeric:tabular-nums;word-break:break-all}
   .item .c em{font-style:normal;color:var(--haze);font-weight:500;font-size:13.5px;font-family:var(--font)}
   .tag{display:inline-block;font-size:11.5px;font-weight:600;border:1px solid var(--line);color:var(--haze);border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px}
   .tag.check{border-color:var(--warn);color:var(--warn)}
-  .go{flex:none;min-width:84px;min-height:46px;padding:0 16px;border:0;border-radius:var(--r-ctl);background:var(--marigold);color:var(--marigold-ink);
-    font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:transform .12s,filter .15s}
-  .go:active{transform:scale(.95);filter:brightness(.92)}
-  .go.alt{background:transparent;border:1px solid var(--line);color:var(--petal)}
-  .go[aria-disabled="true"]{opacity:.4;pointer-events:none}
-  .acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-  .mini{min-height:40px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:transparent;font-size:13.5px;color:var(--petal);
-    display:inline-flex;align-items:center;text-decoration:none;transition:background .15s}
+  .mini-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .mini{min-height:40px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:transparent;font-size:13.5px;display:inline-flex;align-items:center;text-decoration:none;transition:background .15s}
   .mini:active{background:var(--plum-2)}
   .mini.on{border-color:var(--marigold);color:var(--marigold)}
-
   .form{display:grid;gap:10px;margin-top:12px}
   .form .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .form label{display:block;font-size:13px;color:var(--haze);margin-bottom:4px}
@@ -139,83 +152,187 @@
   .form .out{font-family:var(--round);font-weight:700;font-size:20px;word-break:break-all}
   .note{font-size:13.5px;color:var(--haze);background:var(--ink);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:14px}
   .note b{color:var(--petal)}
-  .empty{color:var(--haze);font-size:14.5px;padding:26px 0;text-align:center}
+  .empty{color:var(--haze);font-size:14.5px;padding:26px 8px;text-align:center}
+  .empty svg{width:96px;height:96px;display:block;margin:0 auto 10px}
 
-  #toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--petal);color:var(--ink);
-    padding:11px 18px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.2s;z-index:30;max-width:88vw;text-align:center}
+  .chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px 4px}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;border:1px solid var(--line);border-radius:999px;padding:9px 14px;min-height:44px;display:flex;align-items:center;gap:8px;font-size:14px;white-space:nowrap;text-decoration:none}
+  .chip:active{background:var(--plum-2)}
+  .chip i{font-style:normal;font-family:var(--round);font-weight:700;color:var(--marigold)}
+
+  /* bottom tabs */
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:8;background:rgba(27,21,48,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+  .tabs div{max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+  .tabs button{border:0;background:transparent;min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:12px;color:var(--haze);font-weight:500}
+  .tabs svg{width:24px;height:24px}
+  .tabs button[aria-current="page"]{color:var(--marigold)}
+
+  .scrim{position:fixed;inset:0;background:rgba(10,6,24,.62);opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
+  .scrim.open{opacity:1;pointer-events:auto}
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:11;max-width:480px;margin:0 auto;max-height:88vh;background:var(--plum);border:1px solid var(--line);border-bottom:0;border-radius:var(--r-sheet) var(--r-sheet) 0 0;transform:translateY(105%);visibility:hidden;transition:transform .28s cubic-bezier(.2,.8,.2,1),visibility 0s .28s;display:flex;flex-direction:column}
+  .sheet.open{transform:none;visibility:visible;transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+  .sheet header{display:flex;align-items:center;gap:12px;padding:16px 18px 10px}
+  .sheet header svg{width:38px;height:38px;flex:none}
+  .sheet header h2{font-size:19px;font-weight:650;letter-spacing:-.01em}
+  .sheet header p{font-size:13px;color:var(--haze)}
+  .sheet .body{overflow-y:auto;padding:4px 18px calc(22px + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
+  .way{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+  .way:last-of-type{border-bottom:0}
+  .way div{flex:1}
+  .way b{display:block;font-size:15.5px;font-weight:600}
+  .way span{font-size:13.5px;color:var(--haze)}
+
+  #toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--petal);color:var(--ink);padding:11px 18px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.2s;z-index:30;max-width:88vw;text-align:center}
   #toast.show{opacity:1;transform:translate(-50%,0)}
-
-  @media (max-height:700px){ .key{aspect-ratio:1/0.72} .display .code{font-size:clamp(40px,13vw,56px)} }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="bar">
+  <header class="bar">
     <h1>Short codes for Ncell<small>Unofficial helper. Not made by Ncell.</small></h1>
-    <button class="find" id="findBtn" aria-label="Search all codes">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <button class="round-btn" id="aboutBtn" aria-label="About and accuracy">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#F3EEFF" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.2"/></svg>
     </button>
-  </div>
+  </header>
 
-  <section class="display" aria-live="polite">
-    <div class="what" id="dWhat">Main balance</div>
-    <div class="code" id="dCode"></div>
-    <div class="row">
-      <a class="dial" id="dDial" href="tel:*901%23">
-        <svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.25c1.1.37 2.3.57 3.6.57a1 1 0 011 1V20a1 1 0 01-1 1C10.6 21 3 13.4 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/></svg>
-        <span id="dLabel">Dial</span>
-      </a>
-      <button class="ghost" id="dPin" aria-label="Pin this code" aria-pressed="false">
-        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>
-      </button>
-      <button class="ghost" id="dCopy" aria-label="Copy this code">
-        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 017.5 4H15"/></svg>
-      </button>
+  <!-- HOME -->
+  <section class="view on" id="v-home">
+    <div class="hero">
+      <svg class="scene" viewBox="0 0 400 190" role="img" aria-label="Sunrise over the Himalaya with a mobile tower and prayer flags">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3B2470"/><stop offset=".55" stop-color="#8A3B8F"/><stop offset="1" stop-color="#F08A5D"/></linearGradient>
+          <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FFD98A" stop-opacity=".9"/><stop offset="1" stop-color="#FFB23E" stop-opacity="0"/></radialGradient>
+        </defs>
+        <rect width="400" height="190" fill="url(#sky)"/>
+        <circle cx="292" cy="112" r="70" fill="url(#glow)"/><circle cx="292" cy="112" r="26" fill="#FFC861"/>
+        <g fill="#fff" opacity=".7"><circle cx="40" cy="26" r="1.2"/><circle cx="96" cy="14" r="1"/><circle cx="150" cy="34" r="1.3"/><circle cx="214" cy="18" r="1"/><circle cx="352" cy="30" r="1.2"/></g>
+        <path d="M0 150 L52 92 L84 122 L132 88 L176 118 L214 84 L262 136 L310 98 L352 132 L400 104 V190 H0Z" fill="#5B3A8E"/>
+        <path d="M132 88 L144 103 L135 101 L128 108 L121 100Z M52 92 L64 104 L52 102 L44 108Z M214 84 L228 100 L216 98 L206 104Z M310 98 L322 110 L311 108 L302 114Z" fill="#F3EEFF" opacity=".92"/>
+        <path d="M0 168 L60 132 L118 160 L170 128 L236 164 L300 138 L352 162 L400 142 V190 H0Z" fill="#3A2668"/>
+        <path d="M0 190 V176 Q100 152 200 176 T400 170 V190Z" fill="#241A47"/>
+        <g stroke="#F3EEFF" stroke-width="2.2" fill="none" stroke-linecap="round"><path d="M70 176 L80 118 L90 176 M74 152 H86 M72 164 H88 M77 134 H83"/><path d="M68 112a16 16 0 0124 0M61 104a27 27 0 0138 0" stroke="#FFC861"/></g>
+        <circle cx="80" cy="116" r="3.4" fill="#FFC861"/>
+        <path d="M118 150 Q190 132 262 150" stroke="#F3EEFF" stroke-width="1" fill="none" opacity=".8"/>
+        <g><path d="M134 146l10 0-1 11-8-1z" fill="#7CC4FF"/><path d="M158 142l10-1 0 11-9 0z" fill="#F3EEFF"/><path d="M183 140l10 0 0 11-10 0z" fill="#FF7AA8"/><path d="M208 141l10 1-1 11-9-1z" fill="#6FE3C4"/><path d="M232 144l10 2-2 11-9-2z" fill="#FFC861"/></g>
+      </svg>
+      <div class="hello"><b id="greet">Namaste</b><span>Your Ncell SIM, one tap away.</span></div>
+      <div class="sim">
+        <a href="tel:*901%23" target="_top" data-live="*901#" data-use="bal"><span>Balance</span><b id="simBal">Check</b><em>*901#</em></a>
+        <a href="tel:*903%23" target="_top" data-live="*903#" data-use="num"><span>My number</span><b id="simNum">Show</b><em>*903#</em></a>
+        <a href="sms:17123?body=S" target="_top" data-use="dataleft"><span>Data left</span><b>Ask</b><em>SMS S to 17123</em></a>
+      </div>
+      <div class="reply" id="reply" aria-live="polite"></div>
+    </div>
+
+    <div class="sec">
+      <div class="acts4" id="acts"></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><h2>Good value right now</h2><button data-tab="packs">All packs</button></div>
+      <div class="rail" id="picks"></div>
+    </div>
+
+    <div class="sec" id="recentSec" style="display:none">
+      <div class="sec-h"><h2>Pinned and recent</h2></div>
+      <div class="chips" id="chips"></div>
+    </div>
+    <p class="stamp" id="getAppWrap" style="display:none"><a id="getApp" href="ncell-codes.apk" download style="color:var(--marigold);font-weight:600">Get the Android app</a>: codes run without the dialer step and replies show on this screen.</p>
+  </section>
+
+  <!-- PACKS -->
+  <section class="view" id="v-packs">
+    <div class="sec-h"><h2>Ncell packs and prices</h2></div>
+    <p class="lede">Read from Ncell's own packs page every day. Prices include what Ncell lists there.</p>
+    <div class="seg" id="pkTabs"></div>
+    <div class="seg small" id="pkDays"></div>
+    <div class="sortrow"><span id="pkCount"></span><label>Sort <select id="pkSort"><option value="price">Lowest price</option><option value="value">Best value</option><option value="big">Most data</option></select></label></div>
+    <div class="stack" id="pkList"></div>
+    <p class="stamp" id="pkStamp"></p>
+  </section>
+
+  <!-- PLANNER -->
+  <section class="view" id="v-plan">
+    <div class="sec-h"><h2>How much data do you need?</h2></div>
+    <p class="lede">Set a normal day. The estimate picks the cheapest pack that covers it.</p>
+    <div class="panel">
+      <div class="need">
+        <svg viewBox="0 0 120 120" id="donut" role="img" aria-label="Share of data by activity"></svg>
+        <div class="n"><b id="needGb">0</b><span id="needLbl">GB a month</span><div class="legend" id="legend"></div></div>
+      </div>
+      <div id="sliders"></div>
+    </div>
+    <div class="sec">
+      <div class="seg small" id="planPeriod"></div>
+      <div class="sec-h"><h2 id="planTitle">Packs that cover it</h2></div>
+      <div class="stack" id="planList"></div>
+      <p class="stamp">Estimates assume standard-quality video. HD uses about three times more.</p>
     </div>
   </section>
 
-  <nav class="pad" id="pad" aria-label="Services"></nav>
-
-  <section class="strip">
-    <h2 id="stripTitle">Pinned and recent</h2>
-    <div class="chips" id="chips"></div>
-    <p class="hint" id="stripHint">Codes you pin or use show up here for one-tap redial.</p>
+  <!-- CODES -->
+  <section class="view" id="v-codes">
+    <div class="sec-h"><h2>Every Ncell code</h2></div>
+    <input class="search" id="q" type="search" placeholder="Search by name or code" aria-label="Search codes">
+    <div class="groups" id="groups"></div>
+    <div id="results"></div>
   </section>
-
-  <div class="foot"><a id="getApp" href="ncell-codes.apk" download style="display:none;color:var(--marigold);font-weight:600;margin-bottom:8px">Get the Android app: codes run without the dialer step</a>Codes checked November 2026 against public sources. <button id="aboutBtn">About and accuracy</button></div>
 </div>
+
+<nav class="tabs" aria-label="Sections"><div id="tabbar"></div></nav>
 
 <div class="scrim" id="scrim"></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
-  <header>
-    <div class="digit" id="shDigit" aria-hidden="true"></div>
-    <div style="flex:1"><h2 id="shTitle"></h2><p id="shSub"></p></div>
-    <button class="x" id="shClose" aria-label="Close">✕</button>
-  </header>
+  <header><span id="shIcon"></span><div style="flex:1"><h2 id="shTitle"></h2><p id="shSub"></p></div><button class="round-btn" id="shClose" aria-label="Close">✕</button></header>
   <div class="body" id="shBody"></div>
 </div>
 <div id="toast" role="status"></div>
 
+<script id="snapshot" type="application/json">{"source":"https://www.ncell.com.np/en/individual/packs-and-plans","fetched":"2026-11-15T03:08Z","tabs":["Super Value Packs","Ncell Saapati","Data","Voice","SMS"],"packs":[{"tab":"Super Value Packs","section":"Super Value Packs","name":"Super Value Pack","price":799.0,"validity":"30 Days","days":30,"data_gb":null,"data_text":"Unlimited","fup_gb":200.0,"features":{"Data":"Unlimited","Voice Calls":"Unlimited","SMS":"150/day","OTT":"Lionsgate","FUP":"200 GB, 256Kbps"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/hero-799/buy","app":"https://ncellapp.ncell.com.np/67kLBt"},{"tab":"Super Value Packs","section":"Super Value Packs","name":"Super Value Pack","price":449.0,"validity":"30 Days","days":30,"data_gb":7.0,"data_text":"7 GB","fup_gb":7.0,"features":{"Data":"7 GB","Voice Calls":"Unlimited","SMS":"100/day","OTT":"NA","FUP":"7 GB, 256Kbps"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/hero-449/buy","app":"https://ncellapp.ncell.com.np/tfttVr"},{"tab":"Super Value Packs","section":"Super Value Packs","name":"Super Value Pack","price":599.0,"validity":"30 Days","days":30,"data_gb":25.0,"data_text":"25 GB","fup_gb":25.0,"features":{"Data":"25 GB","Voice Calls":"Unlimited","SMS":"100/day","OTT":"NA","FUP":"25 GB, 256Kbps"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/hero-599/buy","app":"https://ncellapp.ncell.com.np/CvAdc9"},{"tab":"Super Value Packs","section":"Super Value Packs","name":"Super Value Pack","price":699.0,"validity":"30 Days","days":30,"data_gb":50.0,"data_text":"50 GB","fup_gb":50.0,"features":{"Data":"50 GB","Voice Calls":"Unlimited","SMS":"100/day","OTT":"NA","FUP":"50 GB, 256Kbps"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/hero-699/buy","app":"https://ncellapp.ncell.com.np/yDn535"},{"tab":"Super Value Packs","section":"Super Value Packs","name":"Super Value Pack","price":1199.0,"validity":"30 Days","days":30,"data_gb":1.0,"data_text":"Unlimited data, 1 GB Roaming Data in 20+ Countries","fup_gb":200.0,"features":{"Data":"Unlimited data, 1 GB Roaming Data in 20+ Countries","Voice Calls":"Unlimited","SMS":"150/day","OTT":"Lionsgate","FUP":"200 GB, 256Kbps"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/1199-roaming-pack/buy","app":"https://ncellapp.ncell.com.np/BeSYfT"},{"tab":"Super Value Packs","section":"Super Value Packs","name":"Super Value Pack","price":2299.0,"validity":"90 Days","days":90,"data_gb":null,"data_text":"Unlimited","fup_gb":200.0,"features":{"Data":"Unlimited","Voice Calls":"Unlimited","SMS":"150/day","OTT":"Lionsgate","FUP":"200 GB, 256Kbps"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/hero-2299/buy","app":"https://ncellapp.ncell.com.np/WKLKNs"},{"tab":"Super Value Packs","section":"Super Value Packs","name":"Super Value Pack","price":4499.0,"validity":"180 Days","days":180,"data_gb":null,"data_text":"Unlimited","fup_gb":200.0,"features":{"Data":"Unlimited","Voice Calls":"Unlimited","SMS":"150/day","OTT":"Lionsgate","FUP":"200 GB, 256Kbps"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/hero-4499/buy","app":"https://ncellapp.ncell.com.np/TXbV4X"},{"tab":"Super Value Packs","section":"Super Value Packs","name":"Super Value Pack","price":6999.0,"validity":"365 Days","days":365,"data_gb":null,"data_text":"Unlimited","fup_gb":200.0,"features":{"Data":"Unlimited","Voice Calls":"Unlimited","SMS":"150/day","OTT":"Lionsgate","FUP":"200 GB, 256Kbps"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/hero-8499/buy","app":"https://ncellapp.ncell.com.np/4X9MY7"},{"tab":"Super Value Packs","section":"Super Value Renewal Packs","name":"Super Value Renewal","price":799.0,"validity":"30 Days","days":30,"data_gb":200.0,"data_text":"200 GB","fup_gb":null,"features":{"Data":"200 GB","Voice Calls":"All Nepal Unlimited","SMS":"150/day","FUP":"256Kbps"},"web":null,"app":"https://ncellapp.ncell.com.np/RgdvE2"},{"tab":"Super Value Packs","section":"Super Value Renewal Packs","name":"Super Value Renewal","price":449.0,"validity":"30 Days","days":30,"data_gb":7.0,"data_text":"7 GB","fup_gb":null,"features":{"Data":"7 GB","Voice Calls":"All Nepal Unlimited","SMS":"100/day","FUP":"256Kbps"},"web":null,"app":"https://ncellapp.ncell.com.np/rDxPqu"},{"tab":"Super Value Packs","section":"Super Value Renewal Packs","name":"Super Value Renewal","price":599.0,"validity":"30 Days","days":30,"data_gb":25.0,"data_text":"25 GB","fup_gb":null,"features":{"Data":"25 GB","Voice Calls":"All Nepal Unlimited","SMS":"100/day","FUP":"256Kbps"},"web":null,"app":"https://ncellapp.ncell.com.np/EDQTtN"},{"tab":"Super Value Packs","section":"Super Value Renewal Packs","name":"Super Value Renewal","price":699.0,"validity":"30 Days","days":30,"data_gb":50.0,"data_text":"50 GB","fup_gb":null,"features":{"Data":"50 GB","Voice Calls":"All Nepal Unlimited","SMS":"100/day","FUP":"256Kbps"},"web":null,"app":"https://ncellapp.ncell.com.np/2bxRxC"},{"tab":"Ncell Saapati","section":"Available Saapati Services","name":"Voice Saapati UL","price":99.0,"validity":"7 Days","days":7,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Service fee (Inc. tax)":"Rs. 2.48","What you get in Saapati?":"Unlimited All Nepal Voice","Validity":"7 Days","How to get?":"*9988#"},"web":null,"app":"https://ncellapp.ncell.com.np/zU64Rz"},{"tab":"Ncell Saapati","section":"Available Saapati Services","name":"Data Saapati","price":99.0,"validity":"3 Days","days":3,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Service fee (Inc. tax)":"Rs. 2.48","What you get in Saapati?":"Unlimited Data (10 GB High Speed) +100 SMS/day","Validity":"3 Days","How to get?":"*9988#"},"web":null,"app":"https://ncellapp.ncell.com.np/zU64Rz"},{"tab":"Ncell Saapati","section":"Available Saapati Services","name":"Balance Saapati","price":40.0,"validity":"-","days":null,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Service fee (Inc. tax)":"Rs. 2.48","What you get in Saapati?":"Rs. 40 Main Balance","Validity":"-","How to get?":"*9988#"},"web":null,"app":"https://ncellapp.ncell.com.np/zU64Rz"},{"tab":"Ncell Saapati","section":"Available Saapati Services","name":"Voice Saapati","price":50.0,"validity":"3 Days","days":3,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Service fee (Inc. tax)":"Rs. 2.48","What you get in Saapati?":"100 Min All-Nepal Calls","Validity":"3 Days","How to get?":"*9988#"},"web":null,"app":"https://ncellapp.ncell.com.np/zU64Rz"},{"tab":"Ncell Saapati","section":"Available Saapati Services","name":"Data Saapati","price":50.0,"validity":"1 Day","days":1,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Service fee (Inc. tax)":"Rs. 2.48","What you get in Saapati?":"Unlimited data (5 GB High Speed) + 100 SMS","Validity":"1 Day","How to get?":"*9988#"},"web":null,"app":"https://ncellapp.ncell.com.np/zU64Rz"},{"tab":"Data","section":"Data","name":"Hourly Data","price":35.0,"validity":"3 Hours","days":0.12,"data_gb":null,"data_text":"Unlimited Data","fup_gb":null,"features":{"Data Volume":"Unlimited Data"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/rs-35-hourly-data/buy","app":"https://ncellapp.ncell.com.np/HVPnLA"},{"tab":"Data","section":"Data","name":"Data Pack","price":50.0,"validity":"1 Day","days":1,"data_gb":5.0,"data_text":"5GB Unlimited Data + 100 SMS/Day","fup_gb":null,"features":{"Data Volume":"5GB Unlimited Data + 100 SMS/Day"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/50-ul-combo/buy","app":"https://ncellapp.ncell.com.np/tHQzhD"},{"tab":"Data","section":"Data","name":"Data Pack","price":99.0,"validity":"3 Days","days":3,"data_gb":10.0,"data_text":"10GB Unlimited Data + 100 SMS/Day","fup_gb":null,"features":{"Data Volume":"10GB Unlimited Data + 100 SMS/Day"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/99-ul-combo/buy","app":"https://ncellapp.ncell.com.np/Yx5Aey"},{"tab":"Data","section":"Data","name":"Double Majja Pack","price":150.0,"validity":"7 Days","days":7,"data_gb":7.0,"data_text":"7 GB","fup_gb":null,"features":{"Data Volume":"7 GB"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/5gb-double-majja-pack/buy","app":"https://ncellapp.ncell.com.np/frzqWP"},{"tab":"Data","section":"Data","name":"Data Pack","price":200.0,"validity":"7 Days","days":7,"data_gb":20.0,"data_text":"20GB Unlimited Data + 100 SMS/Day","fup_gb":null,"features":{"Data Volume":"20GB Unlimited Data + 100 SMS/Day"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/200-ul-combo/buy","app":"https://ncellapp.ncell.com.np/mXxHrc"},{"tab":"Data","section":"Data","name":"Data Pack","price":249.0,"validity":"7 Days","days":7,"data_gb":20.0,"data_text":"20GB Unlimited Data + Unlimited Calls + 100 SMS/Day","fup_gb":null,"features":{"Data Volume":"20GB Unlimited Data + Unlimited Calls + 100 SMS/Day"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/249-ul-combo/buy","app":"https://ncellapp.ncell.com.np/u9GqZx"},{"tab":"Data","section":"Data","name":"Data Pack","price":349.0,"validity":"30 Days","days":30,"data_gb":12.0,"data_text":"12 GB","fup_gb":null,"features":{"Data Volume":"12 GB"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/349-data/buy","app":"https://ncellapp.ncell.com.np/edgXFq"},{"tab":"Data","section":"Data","name":"Data Pack","price":399.0,"validity":"30 Days","days":30,"data_gb":1.0,"data_text":"1 GB / Day","fup_gb":null,"features":{"Data Volume":"1 GB / Day"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/399-data/buy","app":"https://ncellapp.ncell.com.np/Q6KAxu"},{"tab":"Data","section":"Data","name":"Data Pack","price":499.0,"validity":"30 Days","days":30,"data_gb":30.0,"data_text":"30 GB","fup_gb":null,"features":{"Data Volume":"30 GB"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/499-data/buy","app":"https://ncellapp.ncell.com.np/67dU87"},{"tab":"Data","section":"Data Combo Pack","name":"Data Combo Pack","price":949.0,"validity":"90 Days","days":90,"data_gb":3.0,"data_text":"Unlimited Calls + 3GB Data","fup_gb":null,"features":{"Data Volume":"Unlimited Calls + 3GB Data"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/combo-949/buy","app":"https://ncellapp.ncell.com.np/yxAxVD"},{"tab":"Data","section":"Data Combo Pack","name":"Data Combo Pack","price":1699.0,"validity":"90 Days","days":90,"data_gb":25.0,"data_text":"Unlimited Calls + 25 GB per month (FUP:256 Kbps) + 100SMS/Day","fup_gb":null,"features":{"Data Volume":"Unlimited Calls + 25 GB per month (FUP:256 Kbps) + 100SMS/Day"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/combo-1699/buy","app":"https://ncellapp.ncell.com.np/nuQxvV"},{"tab":"Data","section":"Data Combo Pack","name":"Data Combo Pack","price":3499.0,"validity":"360 Days","days":360,"data_gb":12.0,"data_text":"Unlimited Calls + 12GB Data","fup_gb":null,"features":{"Data Volume":"Unlimited Calls + 12GB Data"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/combo-3499/buy","app":"https://ncellapp.ncell.com.np/CsTdTH"},{"tab":"Data","section":"Data Combo Pack","name":"Data Combo Pack","price":6499.0,"validity":"365 Days","days":365,"data_gb":25.0,"data_text":"Unlimited Calls + 25 GB per month (FUP:256 Kbps) + 100SMS/Day","fup_gb":null,"features":{"Data Volume":"Unlimited Calls + 25 GB per month (FUP:256 Kbps) + 100SMS/Day"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/combo-6499/buy","app":"https://ncellapp.ncell.com.np/D2dtNb"},{"tab":"Voice","section":"Voice","name":"Night Voice Pack","price":15.0,"validity":"1 Day","days":1,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Ncell to Ncell Voice":"Unlimited","Time":"10 PM to 5 AM"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/night-1-day-unlimited-voice-pack/buy","app":"https://ncellapp.ncell.com.np/MSP7Gk"},{"tab":"Voice","section":"Voice","name":"Day Unlimited Voice Pack (5AM to 5PM) with 100 Ncell to Ncell SMS","price":22.0,"validity":"1 Day","days":1,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Ncell to Ncell Voice":"Unlimited","All Network Voice":"-"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/day-1-day-unlimited-voice-pack/buy","app":"https://ncellapp.ncell.com.np/3wgbfh"},{"tab":"Voice","section":"Voice","name":"Voice Pack","price":25.0,"validity":"1 Day","days":1,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Ncell to Ncell Voice":"-","All Network Voice":"40 mins"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/1-day-all-nepal-voice-1/buy","app":null},{"tab":"Voice","section":"Voice","name":"Voice Pack","price":30.0,"validity":"1 Day","days":1,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Ncell to Ncell Voice":"Unlimited","All Network Voice":"-"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/1-day-unlimited-ncell-voice-1/buy","app":"https://ncellapp.ncell.com.np/EZVG3g"},{"tab":"Voice","section":"Voice","name":"Voice Pack","price":39.0,"validity":"1 Day","days":1,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Ncell to Ncell Voice":"-","All Network Voice":"Unlimited"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/rs-39-unlimited-all-nepal/buy","app":"https://ncellapp.ncell.com.np/qQSXGn"},{"tab":"Voice","section":"Voice","name":"Voice Pack","price":50.0,"validity":"3 Days","days":3,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Ncell to Ncell Voice":"-","All Network Voice":"100 mins"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/rs-50-day-unlimited-voice/buy","app":"https://ncellapp.ncell.com.np/NH5nKY"},{"tab":"Voice","section":"Voice","name":"Voice Pack","price":99.0,"validity":"7 Days","days":7,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Ncell to Ncell Voice":"-","All Network Voice":"Unlimited"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/rs-99-ul-all-nepal/buy","app":"https://ncellapp.ncell.com.np/TeMSRB"},{"tab":"Voice","section":"Voice","name":"Voice Pack","price":199.0,"validity":"30 Days","days":30,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Ncell to Ncell Voice":"-","All Network Voice":"299 mins"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/rs-199-all-nepal/buy","app":"https://ncellapp.ncell.com.np/TdUsXz"},{"tab":"Voice","section":"Voice","name":"Voice Pack","price":329.0,"validity":"30 Days","days":30,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Ncell to Ncell Voice":"-","All Network Voice":"Unlimited"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/329-voice/buy","app":"https://ncellapp.ncell.com.np/ntHS2f"},{"tab":"Voice","section":"Voice","name":"Voice Pack","price":599.0,"validity":"84 Days","days":84,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Ncell to Ncell Voice":"-","All Network Voice":"999 mins"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/rs-599-all-nepal/buy","app":"https://ncellapp.ncell.com.np/78zL2A"},{"tab":"Voice","section":"Voice","name":"India Call","price":80.0,"validity":"1 Day","days":1,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Resources":"20 mins India Call"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/international-80rs-pack/buy","app":"https://ncellapp.ncell.com.np/VWKT9E"},{"tab":"Voice","section":"Voice","name":"India Call","price":270.0,"validity":"7 Days","days":7,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Resources":"75 mins India Call"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/international-270rs-pack/buy","app":"https://ncellapp.ncell.com.np/hGhtd3"},{"tab":"Voice","section":"Voice","name":"India Rate Cutter","price":49.0,"validity":"28 Days","days":28,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Resources":"India call at Rs 2.99/min ex tax (Rs 3.79/min with tax)"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/rs-49-india-rate-cutter/buy","app":"https://ncellapp.ncell.com.np/GSpLK2"},{"tab":"Voice","section":"Voice","name":"International Rate Cutter","price":49.0,"validity":"28 Days","days":28,"data_gb":null,"data_text":"","fup_gb":null,"features":{"Resource":"25% Discount on calls to 7 countries*"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/international-49rs-pack/buy","app":"https://ncellapp.ncell.com.np/RzPtwB"},{"tab":"SMS","section":"SMS","name":"SMS Pack","price":15.0,"validity":"1 Day","days":1,"data_gb":null,"data_text":"","fup_gb":null,"features":{"No. of SMS":"100"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/1--day-all-nepal-sms/buy","app":"https://ncellapp.ncell.com.np/kLrqUp"},{"tab":"SMS","section":"SMS","name":"SMS Pack","price":45.0,"validity":"7 Days","days":7,"data_gb":null,"data_text":"","fup_gb":null,"features":{"No. of SMS":"300"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/7--day-all-nepal-sms/buy","app":"https://ncellapp.ncell.com.np/ca3c2G"},{"tab":"SMS","section":"SMS","name":"SMS Pack","price":98.0,"validity":"28 Days","days":28,"data_gb":null,"data_text":"","fup_gb":null,"features":{"No. of SMS":"300"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/28--day-all-nepal-sms/buy","app":"https://ncellapp.ncell.com.np/Ur9NSn"},{"tab":"SMS","section":"SMS","name":"SMS Pack","price":125.0,"validity":"28 Days","days":28,"data_gb":null,"data_text":"","fup_gb":null,"features":{"No. of SMS":"850"},"web":"https://www.ncell.com.np/en/individual/data-and-voice/rs-125-28-day-all-nepal-sms-pack/buy","app":"https://ncellapp.ncell.com.np/xQwFPq"}]}</script>
 <script>
 (function(){
 "use strict";
 var IN_APP=/NepDialApp/.test(navigator.userAgent);
-var store={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}},
-           set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+var PACKS_URL=IN_APP?"https://sabinevolve-hue.github.io/nepdial/ncell/packs.json":"packs.json";
+var store={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
 function $(id){return document.getElementById(id);}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
 function tel(code){return "tel:"+code.replace(/#/g,"%23").replace(/\s+/g,"");}
 function sms(to,body){return "sms:"+to+(body?"?body="+encodeURIComponent(body):"");}
-function toast(m){var t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove("show");},1800);}
+function toast(m){var t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove("show");},1900);}
 function copy(text){
-  function fb(){var ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();
-    try{document.execCommand("copy");toast("Copied "+text);}catch(e){toast(text);}document.body.removeChild(ta);}
+  function fb(){var ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("Copied "+text);}catch(e){toast(text);}document.body.removeChild(ta);}
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){toast("Copied "+text);},fb);}else fb();
 }
+function num(n){return n>=100?Math.round(n).toString():(Math.round(n*10)/10).toString();}
 
-/* kind: ussd (answers on screen) | menu (opens an operator menu) | call | sms | info | form
-   check:true marks codes found in fewer or older sources */
+/* ---------- pictures ---------- */
+var P="#F3EEFF", M="#FFB23E";
+function svg(inner){return '<svg viewBox="0 0 32 32" fill="none" stroke="'+P+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+inner+'</svg>';}
+var ICON={
+  data:svg('<path d="M5 13a16 16 0 0122 0M9 17.5a10 10 0 0114 0"/><circle cx="16" cy="23" r="3" fill="'+M+'" stroke="none"/>'),
+  recharge:svg('<rect x="4" y="8" width="24" height="16" rx="4"/><path d="M17 11l-4 6h5l-3 5" stroke="'+M+'"/>'),
+  loan:svg('<circle cx="16" cy="13" r="8" fill="'+M+'" stroke="none"/><path d="M16 9v8M13 14l3 3 3-3" stroke="#2B1B00"/><path d="M6 25h20"/>'),
+  transfer:svg('<path d="M6 12h18l-5-5M26 20H8l5 5"/><circle cx="16" cy="16" r="2.2" fill="'+M+'" stroke="none"/>'),
+  voice:svg('<path d="M9 5h4l2 6-3 2a13 13 0 006 6l2-3 6 2v4a3 3 0 01-3 3C13.5 25 6 17.5 6 8a3 3 0 013-3z"/><path d="M20 6a7 7 0 016 6" stroke="'+M+'"/>'),
+  sms:svg('<path d="M5 8a3 3 0 013-3h16a3 3 0 013 3v11a3 3 0 01-3 3H13l-6 5v-5a3 3 0 01-2-3z"/><path d="M11 12h10M11 16h6" stroke="'+M+'"/>'),
+  tune:svg('<path d="M12 23V8l12-3v15"/><circle cx="9" cy="23" r="3" fill="'+M+'" stroke="none"/><circle cx="21" cy="20" r="3" fill="'+M+'" stroke="none"/>'),
+  roam:svg('<circle cx="16" cy="16" r="11"/><path d="M5 16h22M16 5c4 3 4 19 0 22M16 5c-4 3-4 19 0 22" /><circle cx="24" cy="8" r="3" fill="'+M+'" stroke="none"/>'),
+  support:svg('<path d="M6 18v-3a10 10 0 0120 0v3"/><rect x="4" y="17" width="5" height="8" rx="2" fill="'+M+'" stroke="none"/><rect x="23" y="17" width="5" height="8" rx="2" fill="'+M+'" stroke="none"/><path d="M26 25c0 2-3 3-7 3"/>'),
+  calls:svg('<path d="M9 6h3l2 5-3 2a11 11 0 005 5l2-3 5 2v3a3 3 0 01-3 3C12 23 6 16 6 9a3 3 0 013-3z"/><path d="M18 9h8M23 6l3 3-3 3" stroke="'+M+'"/>'),
+  sim:svg('<path d="M9 4h10l5 5v17a2 2 0 01-2 2H9a2 2 0 01-2-2V6a2 2 0 012-2z"/><rect x="11" y="15" width="10" height="8" rx="2" fill="'+M+'" stroke="none"/>'),
+  wallet:svg('<rect x="4" y="8" width="24" height="17" rx="4"/><path d="M4 13h24"/><circle cx="22" cy="19" r="2.2" fill="'+M+'" stroke="none"/>'),
+  extras:svg('<path d="M16 4l3.5 7.5 8 1-6 5.5 1.6 8L16 22l-7.1 4 1.6-8-6-5.5 8-1z" fill="'+M+'" stroke="none"/>'),
+  home:svg('<path d="M5 15l11-9 11 9v10a2 2 0 01-2 2h-5v-8h-8v8H7a2 2 0 01-2-2z"/>'),
+  packs:svg('<path d="M16 4l11 6-11 6-11-6zM5 16l11 6 11-6M5 22l11 6 11-6"/>'),
+  plan:svg('<circle cx="16" cy="16" r="11"/><path d="M16 5v11l8 6"/>'),
+  codes:svg('<path d="M12 5l-3 22M23 5l-3 22M6 12h22M4 20h22"/>'),
+  info:svg('<circle cx="16" cy="16" r="11"/><path d="M16 14v8M16 10v.3"/>')
+};
+var EMPTY='<svg viewBox="0 0 96 96" fill="none" aria-hidden="true"><circle cx="48" cy="48" r="40" fill="#2A2147" stroke="#44397A" stroke-width="2"/><circle cx="43" cy="44" r="14" stroke="#F3EEFF" stroke-width="3"/><path d="M54 55l12 12" stroke="#FFB23E" stroke-width="4" stroke-linecap="round"/></svg>';
+
 var G=[
  {k:"1",name:"Balance",sub:"What you have left",items:[
    {id:"bal",n:"Main balance",d:"Balance, and any active pack, on screen.",c:"*901#",alt:"*101#",kind:"ussd"},
@@ -288,72 +405,41 @@ var RULES={
   amt:function(s){return /^[1-9]\d{0,3}$/.test(s)?"":"Enter a whole amount in rupees.";}
 };
 
+
+var GICON={"1":"wallet","2":"sim","3":"data","4":"voice","5":"sms","6":"recharge","7":"transfer","8":"loan","9":"calls","*":"extras","0":"support"};
 var BY={}; G.forEach(function(g){g.items.forEach(function(it){it.g=g;BY[it.id]=it;});});
+function group(k){return G.filter(function(g){return g.k===k;})[0];}
 var pins=store.get("nc_pins",[]).filter(function(i){return BY[i];});
 var recent=store.get("nc_recent",[]).filter(function(i){return BY[i];});
-var current=BY.bal;
 
 function codeText(it){ if(it.kind==="sms") return (it.body?'"'+it.body+'" ':"SMS ")+"to "+it.to; return it.c||""; }
 function hrefOf(it){ if(it.kind==="sms") return sms(it.to,it.body); if(it.kind==="info"||it.kind==="form") return null; return tel(it.c); }
 function verb(it){ return it.kind==="sms"?"Text":it.kind==="call"?"Call":"Dial"; }
-
-/* ---------- display ---------- */
-var typing=null;
-function show(it,animate){
-  current=it; $("dWhat").textContent=it.n;
-  var el=$("dCode"), text=it.kind==="sms"?it.to:(it.c||"");
-  clearInterval(typing);
-  if(animate && window.matchMedia && !matchMedia("(prefers-reduced-motion:reduce)").matches){
-    var i=0; el.innerHTML='<span class="caret"></span>';
-    typing=setInterval(function(){ i++; el.innerHTML=esc(text.slice(0,i))+'<span class="caret"></span>';
-      if(i>=text.length){clearInterval(typing);setTimeout(function(){el.textContent=text;},700);} },85);
-  } else el.textContent=text;
-  var h=hrefOf(it), d=$("dDial");
-  if(h){d.setAttribute("href",h);d.setAttribute("aria-disabled","false");}else{d.removeAttribute("href");d.setAttribute("aria-disabled","true");}
-  $("dLabel").textContent=verb(it)+(it.kind==="sms"&&it.body?' "'+it.body+'"':"");
-  var on=pins.indexOf(it.id)>-1; $("dPin").classList.toggle("on",on); $("dPin").setAttribute("aria-pressed",on);
-}
-function used(it){
-  recent=[it.id].concat(recent.filter(function(i){return i!==it.id;})).slice(0,6); store.set("nc_recent",recent); chips();
-}
-function togglePin(it){
-  var i=pins.indexOf(it.id); if(i>-1){pins.splice(i,1);toast("Unpinned "+it.n);}else{pins.unshift(it.id);toast("Pinned "+it.n);}
-  store.set("nc_pins",pins); chips(); if(current===it) show(it,false);
-}
+function used(it){ recent=[it.id].concat(recent.filter(function(i){return i!==it.id;})).slice(0,6); store.set("nc_recent",recent); chips(); }
+function togglePin(it){ var i=pins.indexOf(it.id); if(i>-1){pins.splice(i,1);toast("Unpinned "+it.n);}else{pins.unshift(it.id);toast("Pinned "+it.n);} store.set("nc_pins",pins); chips(); }
 function chips(){
   var ids=pins.concat(recent.filter(function(i){return pins.indexOf(i)<0;})).filter(function(i){return BY[i].kind!=="form"&&BY[i].kind!=="info";}).slice(0,8);
-  $("chips").innerHTML=ids.map(function(i){var it=BY[i];
-    return '<a class="chip" data-use="'+i+'" href="'+hrefOf(it)+'"'+(IN_APP?'':' target="_top"')+'><i>'+esc(it.kind==="sms"?it.to:it.c)+'</i>'+esc(it.n)+'</a>';}).join("");
-  $("stripHint").style.display=ids.length?"none":"block";
+  $("chips").innerHTML=ids.map(function(i){var it=BY[i];return '<a class="chip" data-use="'+i+'" href="'+hrefOf(it)+'" target="_top"><i>'+esc(it.kind==="sms"?it.to:it.c)+'</i>'+esc(it.n)+'</a>';}).join("");
+  $("recentSec").style.display=ids.length?"block":"none";
 }
 
-/* ---------- keypad ---------- */
-$("pad").innerHTML=G.map(function(g){return '<button class="key" data-k="'+g.k+'" aria-label="'+esc(g.name+": "+g.sub)+'"><b>'+g.k+'</b><span>'+esc(g.name)+'</span></button>';}).join("")
-  +'<button class="key all" data-k="#" aria-label="All codes"><b>#</b><span>All codes</span></button>';
-$("pad").addEventListener("click",function(e){var b=e.target.closest(".key"); if(!b) return; var k=b.getAttribute("data-k");
-  if(k==="#") openAll(); else openGroup(G.filter(function(g){return g.k===k;})[0]);});
-
-/* ---------- sheet ---------- */
-var lastFocus=null;
+/* ---------- code items and forms ---------- */
 function itemHtml(it){
   var h=hrefOf(it), pinned=pins.indexOf(it.id)>-1, tags=(it.kind==="menu"?'<span class="tag">Opens a menu</span>':"")+(it.check?'<span class="tag check">Less common</span>':"");
-  var s='<div class="item" data-id="'+it.id+'"><div class="top"><div class="txt"><h3>'+esc(it.n)+tags+'</h3><p>'+esc(it.d)+'</p>';
+  var s='<div class="item"><div class="top"><div class="txt"><h3>'+esc(it.n)+tags+'</h3><p>'+esc(it.d)+'</p>';
   if(it.kind!=="form") s+='<div class="c">'+esc(codeText(it))+(it.alt?' <em>or '+esc(it.alt)+'</em>':'')+'</div>';
   s+='</div>';
   if(h) s+='<a class="go" data-use="'+it.id+'" href="'+h+'" target="_top">'+verb(it)+'</a>';
   else if(it.kind==="info") s+='<button class="go alt" data-copy="'+esc(it.c)+'">Copy</button>';
   s+='</div>';
   if(it.kind==="form") s+=formHtml(it);
-  else if(h) s+='<div class="acts"><button class="mini'+(pinned?' on':'')+'" data-pin="'+it.id+'">'+(pinned?'Pinned':'Pin')+'</button>'
-    +(it.c?'<button class="mini" data-copy="'+esc(it.c)+'">Copy</button>':'')
-    +(it.alt?'<a class="mini" data-use="'+it.id+'" href="'+tel(it.alt)+'" target="_top">Dial '+esc(it.alt)+'</a>':'')+'</div>';
+  else if(h) s+='<div class="mini-row"><button class="mini'+(pinned?' on':'')+'" data-pin="'+it.id+'">'+(pinned?'Pinned':'Pin')+'</button>'+(it.c?'<button class="mini" data-copy="'+esc(it.c)+'">Copy</button>':'')+(it.alt?'<a class="mini" data-use="'+it.id+'" href="'+tel(it.alt)+'" target="_top">Dial '+esc(it.alt)+'</a>':'')+'</div>';
   return s+'</div>';
 }
 function formHtml(it){
   var F=FORMS[it.form];
   var fields=F.f.map(function(f){return '<div><label for="'+it.id+'_'+f[0]+'">'+esc(f[1])+'</label><input id="'+it.id+'_'+f[0]+'" data-f="'+f[0]+'" data-r="'+f[3]+'" inputmode="numeric" autocomplete="off" placeholder="'+esc(f[2])+'"><div class="err"></div></div>';});
-  return '<div class="form" data-form="'+it.form+'" data-id="'+it.id+'">'+(fields.length===2?'<div class="two">'+fields.join("")+'</div>':fields.join(""))
-    +'<div class="out" aria-live="polite"></div><div class="top" style="gap:8px"><a class="go" style="flex:1" data-use="'+it.id+'" target="_top" aria-disabled="true">'+esc(F.label)+'</a><button class="go alt" data-fcopy style="min-width:74px">Copy</button></div></div>';
+  return '<div class="form" data-form="'+it.form+'">'+(fields.length===2?'<div class="two">'+fields.join("")+'</div>':fields.join(""))+'<div class="out" aria-live="polite"></div><div class="top" style="display:flex;gap:8px"><a class="go" style="flex:1" data-use="'+it.id+'" target="_top" aria-disabled="true">'+esc(F.label)+'</a><button class="go alt" data-fcopy style="min-width:74px">Copy</button></div></div>';
 }
 function wireForms(root){
   Array.prototype.forEach.call(root.querySelectorAll(".form"),function(w){
@@ -372,64 +458,200 @@ function wireForms(root){
     w.querySelector("[data-fcopy]").addEventListener("click",function(){ if(w._code) copy(w._code); else toast("Fill in the fields first"); });
   });
 }
-function openSheet(digit,title,sub,html){
-  lastFocus=document.activeElement;
-  $("shDigit").textContent=digit; $("shTitle").textContent=title; $("shSub").textContent=sub; $("shBody").innerHTML=html; $("shBody").scrollTop=0;
+
+/* ---------- sheet ---------- */
+var lastFocus=null;
+function openSheet(icon,title,sub,html){
+  lastFocus=document.activeElement; $("shIcon").innerHTML=ICON[icon]||""; $("shTitle").textContent=title; $("shSub").textContent=sub; $("shBody").innerHTML=html; $("shBody").scrollTop=0;
   wireForms($("shBody")); $("scrim").classList.add("open"); $("sheet").classList.add("open"); $("shClose").focus({preventScroll:true});
 }
 function closeSheet(){ $("scrim").classList.remove("open"); $("sheet").classList.remove("open"); if(lastFocus&&lastFocus.focus) lastFocus.focus({preventScroll:true}); }
 function openGroup(g){
-  var first=g.items.filter(function(i){return i.kind!=="form"&&i.kind!=="info";})[0]; if(first) show(first,true);
-  var note=g.k==="7"?'<div class="note"><b>Check the number twice.</b> A transfer cannot be undone from here.</div>'
-          :g.k==="6"?'<div class="note">The PIN stays on your phone. This page never sends it anywhere.</div>':"";
-  openSheet(g.k,g.name,g.sub,g.items.map(itemHtml).join("")+note);
-}
-function allHtml(q){
-  q=(q||"").trim().toLowerCase(); var html="",n=0;
-  G.forEach(function(g){
-    var its=g.items.filter(function(it){return !q||(it.n+" "+it.d+" "+(it.c||"")+" "+(it.alt||"")+" "+(it.to||"")+" "+g.name).toLowerCase().indexOf(q)>-1;});
-    if(its.length){n+=its.length;html+='<div class="grp">'+esc(g.name)+'</div>'+its.map(itemHtml).join("");}
-  });
-  return n?html:'<div class="empty">Nothing matches "'+esc(q)+'". Try a word like data, recharge or forward.</div>';
-}
-function openAll(focusSearch){
-  openSheet("#","All codes","Every Ncell code in this app",'<input class="search" id="q" type="search" placeholder="Search by name or code" aria-label="Search codes"><div id="allList">'+allHtml("")+'</div>');
-  $("q").addEventListener("input",function(){ $("allList").innerHTML=allHtml(this.value); wireForms($("allList")); });
-  if(focusSearch) $("q").focus();
+  var note=g.k==="7"?'<div class="note"><b>Check the number twice.</b> A transfer cannot be undone from here.</div>':g.k==="6"?'<div class="note">The PIN stays on your phone. This app never sends it anywhere.</div>':"";
+  openSheet(GICON[g.k],g.name,g.sub,g.items.map(itemHtml).join("")+note);
 }
 function openAbout(){
-  openSheet("i","About and accuracy","Read once",
-   '<div class="note" style="margin-top:4px"><b>This is an independent helper.</b> It is not made, endorsed or supported by Ncell. It only fills in codes that your own phone then dials.</div>'
-  +'<div class="note"><b>How dialing works.</b> '+(IN_APP?'Tap a yellow button and the code runs on your default SIM. Balance transfers ask you to confirm first.':'Tap a yellow button and your dialer opens with the code filled in. Press call to run it. The Android app runs codes without that extra step.')+'</div>'
-  +'<div class="note"><b>Accuracy.</b> Codes were checked in November 2026 against Ncell\'s help pages and Nepali telecom sites. Codes tagged "Less common" appeared in fewer or older sources, so they may have changed. If a code fails, call 9005.</div>'
-  +'<div class="note"><b>Cost.</b> Balance and number checks are free. Packs, loans, tunes and SMS are charged by Ncell at its own rates.</div>'
-  +'<div class="note"><b>Privacy.</b> Pins and recents are saved only on this phone. Nothing is uploaded.</div>');
+  openSheet("info","About and accuracy","Read once",
+   '<div class="note" style="margin-top:4px"><b>This is an independent helper.</b> It is not made, endorsed or supported by Ncell. It fills in codes that your own phone then dials.</div>'
+  +'<div class="note"><b>Pack prices.</b> Read automatically from the packs page on ncell.com.np once a day. The date is shown under the list. Ncell can change a pack at any time, so the price Ncell shows when you buy is the one that counts.</div>'
+  +'<div class="note"><b>How dialing works.</b> '+(IN_APP?'Tap a yellow button and the code runs on your default SIM. Balance and number replies appear on the home screen. Balance transfers ask you to confirm first.':'Tap a yellow button and your dialer opens with the code filled in. Press call to run it. The Android app skips that step.')+'</div>'
+  +'<div class="note"><b>Short codes.</b> Checked in November 2026 against Ncell\'s help pages and Nepali telecom sites. Codes tagged "Less common" appeared in fewer or older sources. If a code fails, call 9005.</div>'
+  +'<div class="note"><b>Privacy.</b> Pins, recents and your last balance reply are saved only on this phone. Nothing about you is uploaded.</div>');
+}
+
+/* ---------- packs ---------- */
+var DATA=null, PK=[];
+var KIND={"Super Value Packs":"combo","Data":"data","Voice":"voice","SMS":"sms","Ncell Saapati":"loan"};
+var KLABEL={data:"Data",combo:"Super value",voice:"Voice",sms:"SMS",loan:"Saapati"};
+var KCODE={data:"*17123#",combo:"*17123#",voice:"*17118#",sms:"*1119#",loan:"*9988#"};
+function norm(p,i){
+  var f=p.features||{}, t=p.data_text||"", g=p.data_gb, k=KIND[p.tab]||"data", days=p.days, o={i:i,p:p,k:k,days:days,price:p.price,tags:[]};
+  if(k==="data"||k==="combo"){
+    var hs=null;
+    var perDay=/GB\s*\/\s*day/i.test(t); if(g&&perDay&&days) hs=g*days; else if(g&&/per month/i.test(t)&&days) hs=g*Math.max(1,Math.round(days/30)); else if(g) hs=g; else if(p.fup_gb) hs=p.fup_gb;
+    o.unl=/unlimited data/i.test(t)||/^unlimited$/i.test(t.trim()); o.gb=hs;
+    o.head=hs?num(hs)+" GB":(o.unl?"Unlimited data":t);
+    o.sub=hs&&o.unl?"at full speed, then unlimited at low speed":(perDay?num(g)+" GB each day":(/per month/i.test(t)?num(g)+" GB each month":p.name));
+    o.rate=hs?p.price/hs:null;
+    if(/unlimited calls/i.test(t)||/unlimited/i.test(f["Voice Calls"]||"")) o.tags.push("Unlimited calls");
+    var sm=f["SMS"]||(/(\d+)\s*SMS\s*\/\s*day/i.exec(t)||[])[0]; if(sm) o.tags.push(/sms/i.test(sm)?sm.replace(/\s*\/\s*day/i," a day"):sm.replace("/day"," SMS a day"));
+    if(f["OTT"]&&f["OTT"]!=="NA") o.tags.push(f["OTT"]+" included");
+    if(p.section&&p.section!==p.tab) o.tags.push(p.section.replace(/ Packs?$/,""));
+  } else if(k==="voice"){
+    var all=f["All Network Voice"], on=f["Ncell to Ncell Voice"], r=f["Resources"]||f["Resource"];
+    if(all&&all!=="-"){o.head=all==="Unlimited"?"Unlimited calls":all;o.sub="to any network in Nepal";}
+    else if(on&&on!=="-"){o.head=on==="Unlimited"?"Unlimited calls":on;o.sub="Ncell to Ncell only";}
+    else {o.head=p.name;o.sub=r||"";}
+    if(f["Time"]) o.tags.push(f["Time"]);
+    if(p.name!=="Voice Pack"&&o.head!==p.name) o.tags.push(p.name.length>34?p.name.slice(0,32)+"…":p.name);
+  } else if(k==="sms"){ o.head=(f["No. of SMS"]||"")+" SMS"; o.sub="to any network in Nepal"; }
+  else { o.head=p.name; o.sub=f["What you get in Saapati?"]||""; if(f["Service fee (Inc. tax)"]) o.tags.push("Fee "+f["Service fee (Inc. tax)"]); if(f["Validity"]&&f["Validity"]!=="-") o.tags.push(f["Validity"]); }
+  return o;
+}
+function validity(o){ return (o.p.validity&&o.p.validity!=="-"?o.p.validity:"")||(o.k==="loan"?"Repay on next recharge":""); }
+function packHtml(o,maxGb,why){
+  var s='<article class="pack">'+(why?'<span class="why">'+esc(why)+'</span>':'')
+   +'<div class="row1"><div><div class="head">'+esc(o.head)+'</div><div class="sub">'+esc(o.sub)+'</div></div>'
+   +'<div class="price"><b>Rs '+num(o.price)+'</b><small>'+esc(validity(o))+'</small></div></div>';
+  if(o.gb&&maxGb) s+='<div class="meter" aria-hidden="true"><i style="width:'+Math.max(6,Math.round(100*Math.sqrt(o.gb/maxGb)))+'%"></i></div>'; else s+='<div style="height:12px"></div>';
+  if(o.tags.length) s+='<div class="tags">'+o.tags.map(function(t){return '<span>'+esc(t)+'</span>';}).join("")+'</div>';
+  s+='<div class="foot"><span class="rate">'+(o.rate?'<b>Rs '+num(o.rate)+'</b> per GB':(o.days&&o.days>=2?'Rs '+num(o.price/o.days)+' a day':''))+'</span><button class="go" data-buy="'+o.i+'">Buy</button></div></article>';
+  return s;
+}
+function buySheet(o){
+  var code=KCODE[o.k], p=o.p;
+  openSheet(o.k==="voice"?"voice":o.k==="sms"?"sms":o.k==="loan"?"loan":"data",o.head+" for Rs "+num(o.price),validity(o)||p.name,
+    '<div class="way"><div><b>Buy with a short code</b><span>Dial '+code+', then pick this pack from Ncell\'s menu. Paid from your balance.</span></div><a class="go" href="'+tel(code)+'" target="_top" data-dialed="'+code+'">Dial</a></div>'
+   +(p.web?'<div class="way"><div><b>Buy on ncell.com.np</b><span>Opens Ncell\'s own checkout for this exact pack.</span></div><a class="go alt" href="'+esc(p.web)+'" target="_blank" rel="noopener">Open</a></div>':'')
+   +(p.app?'<div class="way"><div><b>Buy in the Ncell app</b><span>Opens the official app, if you have it.</span></div><a class="go alt" href="'+esc(p.app)+'" target="_blank" rel="noopener">Open</a></div>':'')
+   +'<div class="note">Check the price on Ncell\'s screen before you confirm. It is the one you pay.</div>');
+}
+var pkTab="data", pkDay="any";
+var DAYF={any:["Any length",function(){return true;}],d1:["1 day or less",function(d){return d!=null&&d<=1;}],d3:["3 days",function(d){return d>1&&d<=3;}],d7:["7 days",function(d){return d>3&&d<=7;}],d30:["About a month",function(d){return d>=28&&d<=31;}],long:["Longer",function(d){return d>31;}]};
+function renderPacks(){
+  var order=["data","combo","voice","sms","loan"];
+  $("pkTabs").innerHTML=order.map(function(k){return '<button data-pk="'+k+'" aria-pressed="'+(k===pkTab)+'">'+KLABEL[k]+'</button>';}).join("");
+  var inTab=PK.filter(function(o){return o.k===pkTab;});
+  var keys=Object.keys(DAYF).filter(function(k){return k==="any"||inTab.some(function(o){return DAYF[k][1](o.days);});});
+  if(keys.indexOf(pkDay)<0) pkDay="any";
+  $("pkDays").innerHTML=pkTab==="loan"?"":keys.map(function(k){return '<button data-day="'+k+'" aria-pressed="'+(k===pkDay)+'">'+DAYF[k][0]+'</button>';}).join("");
+  var list=inTab.filter(function(o){return pkTab==="loan"||DAYF[pkDay][1](o.days);}), sort=$("pkSort").value;
+  list.sort(function(a,b){ if(sort==="value") return (a.rate||1e9)-(b.rate||1e9)||a.price-b.price; if(sort==="big") return (b.gb||0)-(a.gb||0)||a.price-b.price; return a.price-b.price; });
+  var maxGb=Math.max.apply(null,list.map(function(o){return o.gb||0;}).concat([0]));
+  var best=null; list.forEach(function(o){ if(o.rate&&(!best||o.rate<best.rate)) best=o; });
+  $("pkCount").textContent=list.length+(list.length===1?" pack":" packs");
+  $("pkList").innerHTML=list.length?list.map(function(o){return packHtml(o,maxGb,o===best&&list.length>1?"Lowest price per GB here":"");}).join(""):'<div class="empty">'+EMPTY+'No packs of that length in this group. Choose another length.</div>';
+  var d=DATA&&DATA.fetched?new Date(DATA.fetched):null;
+  $("pkStamp").innerHTML='Prices read from <a href="https://www.ncell.com.np/en/individual/packs-and-plans" target="_blank" rel="noopener">Ncell\'s packs page</a>'+(d&&!isNaN(d)?" on "+d.toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"}):"")+'.';
+}
+function renderPicks(){
+  var d=PK.filter(function(o){return (o.k==="data"||o.k==="combo")&&o.rate;});
+  function best(f){var b=null;d.filter(f).forEach(function(o){if(!b||o.rate<b.rate)b=o;});return b;}
+  var picks=[["Best for a day",best(function(o){return o.days<=1;})],["Best for a week",best(function(o){return o.days>3&&o.days<=7;})],["Best for a month",best(function(o){return o.days>=28&&o.days<=31;})]].filter(function(x){return x[1];});
+  var maxGb=Math.max.apply(null,picks.map(function(x){return x[1].gb;}).concat([0]));
+  $("picks").innerHTML=picks.length?picks.map(function(x){return packHtml(x[1],maxGb,x[0]);}).join(""):'<div class="empty">Pack prices are not available right now.</div>';
+}
+function usePacks(d){ if(!d||!d.packs||!d.packs.length) return false; DATA=d; PK=d.packs.map(norm); renderPacks(); renderPicks(); renderPlan(); return true; }
+function loadPacks(){
+  var snap=null; try{snap=JSON.parse($("snapshot").textContent);}catch(e){}
+  var cached=store.get("nc_packs",null);
+  usePacks(cached&&snap&&cached.fetched>snap.fetched?cached:snap||cached);
+  if(!window.fetch) return;
+  fetch(PACKS_URL,{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(d){ if(d&&d.packs&&(!DATA||d.fetched>=DATA.fetched)){store.set("nc_packs",d);usePacks(d);} }).catch(function(){});
+}
+
+/* ---------- planner ---------- */
+var USE=[["video","YouTube and video",0.7,"#7CC4FF",1],["reels","TikTok and Reels",0.6,"#FF7AA8",1],["web","Facebook and browsing",0.12,"#6FE3C4",1.5],["music","Music",0.07,"#FFB23E",0.5],["vcall","Video calls",0.5,"#C9A6FF",0]];
+var hours=store.get("nc_hours",null)||USE.map(function(u){return u[4];}), period="month";
+var PER={day:["A day",1,function(d){return d!=null&&d<=1;}],week:["A week",7,function(d){return d>3&&d<=7;}],month:["A month",30,function(d){return d>=28&&d<=31;}]};
+function renderSliders(){
+  $("sliders").innerHTML=USE.map(function(u,i){return '<div class="slider"><label for="s_'+u[0]+'">'+u[1]+'<b id="h_'+u[0]+'"></b></label><input type="range" id="s_'+u[0]+'" data-i="'+i+'" min="0" max="8" step="0.5" value="'+hours[i]+'"></div>';}).join("");
+  $("planPeriod").innerHTML=Object.keys(PER).map(function(k){return '<button data-per="'+k+'" aria-pressed="'+(k===period)+'">'+PER[k][0]+'</button>';}).join("");
+}
+function renderPlan(){
+  var per=PER[period], parts=USE.map(function(u,i){return hours[i]*u[2]*per[1];}), total=parts.reduce(function(a,b){return a+b;},0);
+  USE.forEach(function(u,i){var h=$("h_"+u[0]); if(h) h.textContent=hours[i]?(hours[i]+" h a day"):"none";});
+  $("needGb").textContent=num(total); $("needLbl").textContent="GB "+per[0].toLowerCase();
+  var C=2*Math.PI*46, off=0, arcs='<circle cx="60" cy="60" r="46" stroke="#1B1530" stroke-width="16" fill="none"/>';
+  if(total>0) parts.forEach(function(v,i){ if(!v) return; var len=C*v/total; arcs+='<circle cx="60" cy="60" r="46" fill="none" stroke="'+USE[i][3]+'" stroke-width="16" stroke-dasharray="'+len.toFixed(2)+' '+(C-len).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 60 60)"/>'; off+=len; });
+  $("donut").innerHTML=arcs;
+  $("legend").innerHTML=USE.map(function(u,i){return parts[i]?'<span><i style="background:'+u[3]+'"></i>'+u[1]+' '+num(parts[i])+' GB</span>':"";}).join("");
+  var pool=PK.filter(function(o){return (o.k==="data"||o.k==="combo")&&per[2](o.days)&&(o.gb||o.unl)&&!/renewal/i.test(o.p.section+o.p.name);});
+  var fit=pool.filter(function(o){return (o.gb||0)>=total||(o.unl&&!o.gb);}).sort(function(a,b){return a.price-b.price;}).slice(0,3);
+  var html, maxGb=Math.max.apply(null,pool.map(function(o){return o.gb||0;}).concat([0]));
+  if(total===0) html='<div class="empty">Move a slider to see packs.</div>';
+  else if(fit.length) html=fit.map(function(o,i){return packHtml(o,maxGb,i===0?"Cheapest that covers "+num(total)+" GB":"");}).join("");
+  else { var big=pool.slice().sort(function(a,b){return (b.gb||0)-(a.gb||0);})[0]; html=big?packHtml(big,maxGb,"Largest available: covers "+Math.round(100*big.gb/total)+"% of your use"):'<div class="empty">'+EMPTY+'No pack of this length is listed right now.</div>'; }
+  $("planTitle").textContent=total?"Packs that cover "+num(total)+" GB "+per[0].toLowerCase():"Packs that cover it";
+  $("planList").innerHTML=html;
+}
+
+/* ---------- home ---------- */
+var ACTS=[["data","Buy data",function(){pkTab="data";renderPacks();go("packs");}],["recharge","Recharge",function(){openGroup(group("6"));}],["loan","Saapati",function(){pkTab="loan";renderPacks();go("packs");}],["transfer","Send balance",function(){openGroup(group("7"));}],
+          ["voice","Voice packs",function(){pkTab="voice";renderPacks();go("packs");}],["tune","Caller tune",function(){openGroup(group("*"));}],["calls","Call settings",function(){openGroup(group("9"));}],["support","Support",function(){openGroup(group("0"));}]];
+$("acts").innerHTML=ACTS.map(function(a,i){return '<button class="act" data-act="'+i+'"><i>'+ICON[a[0]]+'</i>'+a[1]+'</button>';}).join("");
+(function(){var h=new Date().getHours();$("greet").textContent=h<5?"Namaste":h<12?"Good morning":h<17?"Good afternoon":"Good evening";})();
+
+/* replies from the Android app (single-answer codes only) */
+function showReply(code,text,at){
+  var r=$("reply"); r.innerHTML=esc(text)+'<small>'+esc(code)+", "+new Date(at).toLocaleString(undefined,{hour:"numeric",minute:"2-digit",day:"numeric",month:"short"})+'</small>'; r.classList.add("on");
+  if(code==="*901#"||code==="*101#"){var m=/(?:Rs\.?|NPR|रु\.?)\s*(-?[\d,]+(?:\.\d+)?)/i.exec(text); $("simBal").textContent=m?"Rs "+m[1]:"See below";}
+  if(code==="*903#"||code==="*103#"){var n=/(9[678]\d{8})/.exec(text.replace(/\s/g,"")); $("simNum").textContent=n?n[1]:"See below";}
+}
+window.onUssdReply=function(code,text,ok){
+  if(!ok){toast("Your phone will show the reply");return;}
+  var at=Date.now(), saved=store.get("nc_replies",{}); saved[code]={t:text,at:at}; store.set("nc_replies",saved); showReply(code,text,at);
+};
+(function(){var s=store.get("nc_replies",{}); ["*903#","*901#"].forEach(function(c){ if(s[c]) showReply(c,s[c].t,s[c].at); });})();
+
+/* ---------- codes view ---------- */
+$("groups").innerHTML=G.map(function(g){return '<button class="group" data-g="'+g.k+'">'+ICON[GICON[g.k]]+'<b>'+esc(g.name)+'</b><span>'+esc(g.sub)+'</span></button>';}).join("");
+function searchCodes(q){
+  q=q.trim().toLowerCase(); $("groups").style.display=q?"none":"grid";
+  if(!q){$("results").innerHTML="";return;}
+  var html="",n=0;
+  G.forEach(function(g){var its=g.items.filter(function(it){return (it.n+" "+it.d+" "+(it.c||"")+" "+(it.alt||"")+" "+(it.to||"")+" "+g.name).toLowerCase().indexOf(q)>-1;});
+    if(its.length){n+=its.length;html+='<div class="grp">'+esc(g.name)+'</div>'+its.map(itemHtml).join("");}});
+  $("results").innerHTML=n?html:'<div class="empty">'+EMPTY+'Nothing matches "'+esc(q)+'". Try a word like data, recharge or forward.</div>';
+  wireForms($("results"));
+}
+$("q").addEventListener("input",function(){searchCodes(this.value);});
+
+/* ---------- navigation ---------- */
+var TABS=[["home","Home"],["packs","Packs"],["plan","Planner"],["codes","Codes"]];
+$("tabbar").innerHTML=TABS.map(function(t){return '<button data-tab="'+t[0]+'">'+ICON[t[0]]+t[1]+'</button>';}).join("");
+function go(name){
+  TABS.forEach(function(t){$("v-"+t[0]).classList.toggle("on",t[0]===name);});
+  Array.prototype.forEach.call(document.querySelectorAll("#tabbar button"),function(b){ if(b.getAttribute("data-tab")===name) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
+  window.scrollTo(0,0); store.set("nc_tab",name);
 }
 
 /* ---------- events ---------- */
 document.addEventListener("click",function(e){
   var t=e.target, a;
-  if((a=t.closest("[data-use]"))){ var it=BY[a.getAttribute("data-use")]; if(a.getAttribute("aria-disabled")==="true"){e.preventDefault();return;}
-    used(it); if(it.kind!=="form") show(it,false);
-    var href=a.getAttribute("href")||"";
-    if(href.indexOf("tel:")===0){ var code=decodeURIComponent(href.slice(4));
-      if(IN_APP) toast("Dialing "+code); else { try{navigator.clipboard.writeText(code);}catch(x){} toast("Opening dialer with "+code); } }
-    return; }
+  if((a=t.closest("[data-live]"))&&IN_APP&&window.NepDial&&NepDial.ussd){ e.preventDefault(); used(BY[a.getAttribute("data-use")]); toast("Asking Ncell…"); NepDial.ussd(a.getAttribute("data-live")); return; }
+  if((a=t.closest("[data-use]"))){ if(a.getAttribute("aria-disabled")==="true"){e.preventDefault();return;} used(BY[a.getAttribute("data-use")]);
+    var href=a.getAttribute("href")||""; if(href.indexOf("tel:")===0){var code=decodeURIComponent(href.slice(4)); toast((IN_APP?"Dialing ":"Opening dialer with ")+code);} return; }
+  if((a=t.closest("[data-dialed]"))){ toast((IN_APP?"Dialing ":"Opening dialer with ")+a.getAttribute("data-dialed")); return; }
+  if((a=t.closest("[data-buy]"))){ buySheet(PK[+a.getAttribute("data-buy")]); return; }
   if((a=t.closest("[data-pin]"))){ var p=BY[a.getAttribute("data-pin")]; togglePin(p); var on=pins.indexOf(p.id)>-1; a.classList.toggle("on",on); a.textContent=on?"Pinned":"Pin"; return; }
   if((a=t.closest("[data-copy]"))){ copy(a.getAttribute("data-copy")); return; }
+  if((a=t.closest("[data-tab]"))){ go(a.getAttribute("data-tab")); return; }
+  if((a=t.closest("[data-act]"))){ ACTS[+a.getAttribute("data-act")][2](); return; }
+  if((a=t.closest("[data-g]"))){ openGroup(group(a.getAttribute("data-g"))); return; }
+  if((a=t.closest("[data-pk]"))){ pkTab=a.getAttribute("data-pk"); pkDay="any"; renderPacks(); return; }
+  if((a=t.closest("[data-day]"))){ pkDay=a.getAttribute("data-day"); renderPacks(); return; }
+  if((a=t.closest("[data-per]"))){ period=a.getAttribute("data-per"); renderSliders(); renderPlan(); return; }
 });
-$("dDial").addEventListener("click",function(){ used(current); var h=this.getAttribute("href")||""; if(h.indexOf("tel:")===0) toast((IN_APP?"Dialing ":"Opening dialer with ")+decodeURIComponent(h.slice(4))); });
-if(!IN_APP) $("dDial").setAttribute("target","_top");
-$("dPin").addEventListener("click",function(){togglePin(current);});
-$("dCopy").addEventListener("click",function(){copy(current.kind==="sms"?current.to:current.c);});
-$("findBtn").addEventListener("click",function(){openAll(true);});
+$("pkSort").addEventListener("change",renderPacks);
+$("sliders").addEventListener("input",function(e){var i=e.target.getAttribute("data-i"); if(i==null) return; hours[+i]=+e.target.value; store.set("nc_hours",hours); renderPlan();});
 $("aboutBtn").addEventListener("click",openAbout);
 $("shClose").addEventListener("click",closeSheet);
 $("scrim").addEventListener("click",closeSheet);
 document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeSheet(); });
 
-if(!IN_APP && /Android/i.test(navigator.userAgent)) $("getApp").style.display="block";
-chips(); show(BY[recent[0]]&&BY[recent[0]].kind!=="form"&&BY[recent[0]].kind!=="info"?BY[recent[0]]:BY.bal,true);
+if(!IN_APP && /Android/i.test(navigator.userAgent)) $("getAppWrap").style.display="block";
+chips(); renderSliders(); loadPacks(); go("home");
 if("serviceWorker" in navigator && location.protocol==="https:"){ navigator.serviceWorker.register("sw.js").catch(function(){}); }
 })();
 </script>

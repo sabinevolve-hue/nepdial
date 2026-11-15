@@ -1,0 +1,24 @@
+name: Refresh Ncell packs
+on:
+  schedule:
+    - cron: "17 1 * * *"   # daily, about 07:00 Nepal time
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python backend/fetch_packs.py ncell/packs.json
+      - name: Commit if packs changed
+        run: |
+          # ignore the timestamp line when deciding whether anything really changed
+          if git diff -I'"fetched"' --quiet -- ncell/packs.json; then git checkout -- ncell/packs.json; echo "No pack changes"; exit 0; fi
+          git config user.name "nepdial-bot"
+          git config user.email "nepdial-bot@users.noreply.github.com"
+          git commit -am "data: refresh Ncell packs"
+          git push
