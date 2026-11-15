@@ -1,0 +1,4 @@
+{"name":"Short codes for Ncell (unofficial)","short_name":"Ncell codes","start_url":"./","scope":"./","display":"standalone",
+"background_color":"#1B1530","theme_color":"#1B1530","description":"Every Ncell short code on one keypad. Unofficial helper.",
+"icons":[{"src":"icon-192.png","sizes":"192x192","type":"image/png"},{"src":"icon-512.png","sizes":"512x512","type":"image/png"},
+{"src":"icon-maskable.png","sizes":"512x512","type":"image/png","purpose":"maskable"}]}
